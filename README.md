@@ -1,7 +1,7 @@
 Welcome to the Dead Code identification toolset, this toolset can be used together
 with the dead files plugin for Eclipse and the treemap visualization.
 
-==Configuration==
+##Configuration
 
 Please add a config.yml file in the root directory with
 the following contents:
