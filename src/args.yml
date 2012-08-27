@@ -1,0 +1,163 @@
+command:
+  description: "Dynamic Dead Code Detection Tools For PHP5\nDeveloped by Hostnet B.V.\nhttp://www.hostnet.nl\nHidde Boomsma\nhidde@hostnet.nl"
+  version:  0.1.3
+options:
+  quiet:  
+    short_name: -q
+    long_name: --quiet
+    description: don't print status messages to stdout
+    action: StoreTrue
+  dsn:
+    short_name: -d
+    long_name: --dsn
+    description: The Data Source Name <driver>://<username>:<password>@<host>:<port>/<database> ex. "mysql://user:pass@my.server.nl/database"
+    action: StoreString
+    default: mysql:host=localhost;dbname=deadfiles
+  username:
+    short_name: -u
+    long_name: --user
+    description: Username for the datasource
+    action: StoreString
+    default: dead
+  password:
+    short_name: -p
+    long_name: --password
+    description: Password for the datasource
+    action: StoreString
+  table:
+    short_name: -t
+    long_name: --table
+    description: the table in the database where you want to store information or fetch it from
+    action: StoreString
+    default: includes
+  information:
+    short_name: -i
+    long_name: --information
+    description: display memory and run time information after the command has finished (on stderr)
+    action: StoreTrue
+  output:
+    short_name: -o
+    long_name: --output
+    description: the output file (use - for stdout)
+    action: StoreString
+    default: "-"  
+commands:
+  color: 
+    description: generate a colors.txt file for use in eclipse
+    options:
+      workspace:
+        short_name: -p
+        long_name: --workspace_path
+        description: Cut off this string from the path generated for colors.txt to match your workspace checkout
+        action: StoreString
+#      window:
+#        short_name: -n
+#        long_name: --window
+#        description: The window in days whithin a file should be accessed to be considerd alive
+#        action: StoreInt
+#      vcs:
+#        short_name: -u
+#        long_name: --usevcs
+#        description: Use VCS data to determine if a file is dead. When a file is edited within the vcs window it will be considered alive. Beware that moving files may also record a change for a file.
+#        action: StoreTrue
+#      vcs_window:
+#        short_name: -c
+#        long_name: --vcswindow
+#        description: the window in days whithin a file should be accessed to be considerd alive
+#        action: StoreInt
+#         
+  prime:
+    description: read a directory path and store it in the database
+    options:
+      vcs:
+        short_name: -v
+        long_name: --vcs
+        description: the versioning system to use
+        default: none
+        choices: [none,svn,git]
+        add_list_option: true
+    arguments:
+      path:
+        description: The path to read the files from for priming
+        action: StoreString
+#  bench:
+#    description: give simple benchmark data
+#  ast:
+#    description: give static ast data
+  tree:
+    description: puts aggregated data in the database
+    options:
+      table:
+        short_name: -t
+        long_name: --table
+        description: Table where the aggregated data should be saved
+        action: StoreString
+  stats:
+    description: display some basic statistic information from the table
+    options:
+      date_format:
+        short_name: -d
+        long_name: --date_format
+        description: The format to use for the date fields
+        default: Y-m-d H:i:s
+      latex_prefix:
+        short_name: -l
+        long_name: --latex_prefix
+        description: A prefix for the latex command generated
+        default: ""
+      utc:
+        short_name: -u
+        long_name: --utc
+        description: display dates and times in UTC
+        default: false
+        action: StoreTrue
+      format:
+        short_name: -f
+        long_name: --format
+        description: format to use for output
+        default: text
+        choices: [text,latex]
+        add_list_option: true
+  json:
+    description: get json for the treemap for a specific path from a cashe tree database
+    arguments:
+      path:
+        description: path to get the json for
+        action: StoreString
+        default: "/"        
+  graph:
+    description: create various visualizations
+    options:
+      width:
+        short_name: -w
+        long_name: --width
+        description: the width of the svg viewbox
+        action: StoreInt
+        default: 1600
+      height:
+        short_name: -h
+        long_name: --height
+        description: the height of the svn viewbox
+        action: StoreInt
+        default: 800
+    commands:
+      saturation:
+        description: gives a graphical representation of how many new files are used over time
+        options:
+          path:
+            short_name: -p
+            long_name: --path
+            description: only inspect files under this path
+            action: StoreString
+            default: "/"
+          scale:
+            short_name: -s
+            long_name: --scale
+            description: Scale the graph to days and % all with all applications starting at 0 days
+            action: StoreTrue
+        arguments:
+          tables:
+            description: tables that should be included
+            multiple: true
+            optional: true
+            default: null
