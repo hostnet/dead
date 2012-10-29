@@ -122,6 +122,7 @@ commands:
     description: get json for the treemap for a specific path from a cashe tree database
     arguments:
       path:
+        optional: true
         description: path to get the json for
         action: StoreString
         default: "/"        
