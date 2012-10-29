@@ -1,6 +1,6 @@
 command:
   description: "Dynamic Dead Code Detection Tools For PHP5\nDeveloped by Hostnet B.V.\nhttp://www.hostnet.nl\nHidde Boomsma\nhidde@hostnet.nl"
-  version:  0.1.3
+  version:  0.1.6
 options:
   quiet:  
     short_name: -q

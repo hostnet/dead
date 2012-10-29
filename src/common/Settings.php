@@ -27,11 +27,14 @@ class Settings
     //Singleton
     if($settings === null) {
       try {
+	$phardir = realpath(dirname(Phar::running(false)));
         if(file_exists('/etc/dead.conf')) {
           $config_file = '/etc/dead.conf';
         } elseif(isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.deadrc')) {
           $config_file = $_SERVER['HOME'] . '/.deadrc';
           echo "found $config_file";
+	} elseif(file_exists("$phardir/config.yml")) {
+          $config_file = "$phardir/config.yml";
         } else {
           $config_file = stream_resolve_include_path("config.yml"); 
         }
