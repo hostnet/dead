@@ -82,11 +82,11 @@ class PrimeTask extends AbstractPDOTask
 
     if($this->vcs == self::SVN) {
       $visitor = new SubversionVisitor($this->path);
-      $this->addVersioning($file,$visitor);
+      $this->addVersioning($file, $visitor);
       echo "added versioning info from svn to disk file list\n";
     } elseif($this->vcs == self::GIT) {
       $visitor = new GitVisitor($this->path);
-      $this->addVersioning($file,$visitor);
+      $this->addVersioning($file, $visitor);
       echo "added versioning info from git to disk file list\n";
     } elseif($this->vcs == self::NONE) {
       echo "No versioning info added (no vcs specified)\n";
@@ -135,15 +135,16 @@ class PrimeTask extends AbstractPDOTask
       }
 
       $this->getDb()->exec($sql);
-      echo $sql;
     }
   }
 
   private function insertNew(array $new)
   {
-    if(count($new)) {
-      $table = $this->getTable();
-      $db = $this->getDb();
+    $table = $this->getTable();
+    $db = $this->getDb();
+    $new_files = array_chunk($new, 1000, true);
+    $batch = 0;
+    foreach($new_files as $new) {
       $values = "";
       foreach($new as $file => $data) {
         /*
@@ -151,14 +152,15 @@ class PrimeTask extends AbstractPDOTask
          */
         $safeFile = $db->quote($file);
         $changedAt = $data->getSQLChangedAt();
-        $values .= "($safeFile,NOW(),$changedAt),";
+        $values .= "($safeFile,NOW(),$changedAt),\n";
       }
-      $values = substr($values, 0, -1);
+      $values = substr($values, 0, -2);
 
-      $query = "INSERT INTO $table (file,added_at,changed_at) VALUES $values";
-
+      $query =
+        "INSERT INTO $table (file,added_at,changed_at) VALUES\n$values";
       $db->exec($query);
     }
+
   }
 
   private function updateDead($removed)
@@ -167,8 +169,7 @@ class PrimeTask extends AbstractPDOTask
       $table = $this->getTable();
       $values = implode("\",\"", array_keys($removed));
       $query =
-        "UPDATE $table SET deleted_at = NOW() WHERE file IN (\"$values\") AND file LIKE \"$this->path%\"";
-      echo $query . PHP_EOL;
+        "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND file IN (\"$values\") AND file LIKE \"$this->path%\"";
       $this->getDb()->exec($query);
     }
   }

@@ -11,7 +11,7 @@ class TreeTask extends AbstractPDOTask
   private $query =
     <<<EOQ
     CREATE TABLE IF NOT EXISTS %s (
-        file varchar(255) NOT NULL,
+        file varchar(255) BINARY NOT NULL,
         count bigint(20) NOT NULL,
         file_count int(11) NOT NULL,
         dead_count int(11) NOT NULL,
@@ -29,7 +29,7 @@ EOQ;
     parent::__construct();
     $settings = Settings::instance();
 
-    //Load table from settings, if not given use the 
+    //Load table from settings, if not given use the
     //Source table name and append _tree
     $table = $settings->getCommand()->getOption("table");
     if($table == "") {
@@ -57,7 +57,7 @@ EOQ;
   }
 
   /**
-   * 
+   *
    * @param array $data
    * @return string
    */
@@ -73,7 +73,7 @@ EOQ;
   }
 
   /**
-   * 
+   *
    * @param array $data
    * @return string
    */

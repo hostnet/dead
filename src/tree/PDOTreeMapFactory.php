@@ -21,11 +21,11 @@ class PDOTreeMapFactory extends AbstractTreeFactory
     private $db;
 
     /**
-     * 
+     *
      * @var array[int]Node
      */
     private $leaves = array();
-    
+
     private $query = "SELECT * FROM %s WHERE file REGEXP %s";
 
     public function __construct(PDO $db)
@@ -50,12 +50,12 @@ class PDOTreeMapFactory extends AbstractTreeFactory
 
     /**
      *
-     * @param $path string       	
-     * @param $extension string       	
+     * @param $path string
+     * @param $extension string
      * @return void
      */
     public function query($path)
-    {        
+    {
         $path = $this->db->quote("^$path/[^/]+$");
         $query = sprintf($this->query, $this->table,$path);
         $statement = $this->db->query($query);
@@ -68,7 +68,7 @@ class PDOTreeMapFactory extends AbstractTreeFactory
     }
 
     /**
-     * 
+     *
      * @param array $row
      * @return Node
      */

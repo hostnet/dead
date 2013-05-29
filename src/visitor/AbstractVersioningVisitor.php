@@ -4,24 +4,22 @@ require_once("tree/elements/Versioning.php");
 
 abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitor
 {
-    /*
-     * @var $maxCommits int
-     */
-    private $maxCommits = 2;
+
+	  const max_commits = 1;
 
     /**
      *
-     * @param $path string       	
+     * @param $path string
      * @return array[int]commit
      */
-    abstract protected function getCommits($path, $max);
+    abstract protected function getCommits($path);
 
     public function visitNode(Node &$node)
     {
         $commits = $this
-                ->getCommits($node->getLocation(), $this->maxCommits);
+                ->getCommits($node->getLocation());
         if (count($commits)) {
-            $versioning = new Versioning($commits, $this->maxCommits);
+            $versioning = new Versioning($commits, self::max_commits);
             $node->addElement($versioning);
         }
 
