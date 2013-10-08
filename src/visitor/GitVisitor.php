@@ -1,5 +1,4 @@
 <?php
-require_once "AbstractVersioningVisitor.php";
 define("MiB", 1048575);
 define("FIELD", 255);
 

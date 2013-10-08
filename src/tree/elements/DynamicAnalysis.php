@@ -1,6 +1,4 @@
 <?php
-require_once "INodeElement.php";
-require_once "IAggregatable.php";
 
 class DynamicAnalysis implements INodeElement, IAggregatable {
 	

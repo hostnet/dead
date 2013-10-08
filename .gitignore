@@ -2,3 +2,4 @@ dead.phar
 .settings/*
 .buildpath
 .project
+/vendor/*

@@ -1,6 +1,4 @@
 <?php
-require_once "ITask.php";
-require_once "common/Settings.php";
 
 abstract class AbstractPDOTask implements ITask
 {

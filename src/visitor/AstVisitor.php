@@ -1,8 +1,4 @@
 <?php
-require_once "AbstractNodeElementVisitor.php";
-require_once "tree/FileTreeFactory.php";
-require_once "tree/elements/Ast.php";
-require_once "common/Version.php";
 
 class AstVisitor extends AbstractNodeElementVisitor
 {

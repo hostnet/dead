@@ -4,9 +4,6 @@
  * @author Hidde Boomsma <hidde@hostnet.nl>
  *
  */
-require_once "AbstractPDOTask.php";
-require_once "common/Settings.php";
-require_once "common/Gnuplot.php";
 
 class SaturationGraphTask extends AbstractPDOTask
 {

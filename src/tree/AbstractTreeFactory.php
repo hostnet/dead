@@ -1,6 +1,4 @@
 <?php
-require_once "ITreeFactory.php";
-require_once "Tree.php";
 
 abstract class AbstractTreeFactory implements ITreeFactory{
 	/**

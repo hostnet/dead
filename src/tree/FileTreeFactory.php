@@ -1,5 +1,4 @@
 <?php
-require_once "AbstractTreeFactory.php";
 
 class FileTreeFactory extends AbstractTreeFactory {
 	private $files = array ();

@@ -1,8 +1,4 @@
 <?php
-require_once "AbstractPDOTask.php";
-require_once "tree/PDOTreeFactory.php";
-require_once "visitor/PDOCacheTreeVisitor.php";
-require_once "common/Settings.php";
 
 class TreeTask extends AbstractPDOTask
 {

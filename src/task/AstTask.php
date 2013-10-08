@@ -1,7 +1,4 @@
 <?php
-require_once "ITask.php";
-require_once "visitor/AstVisitor.php";
-require_once "visitor/AstFilesVisitor.php";
 
 class AstTask implements ITask
 {

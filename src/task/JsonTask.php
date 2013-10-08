@@ -1,8 +1,4 @@
 <?php
-require_once "AbstractPDOTask.php";
-require_once "tree/PDOTreeMapFactory.php";
-require_once "visitor/JsonVisitor.php";
-require_once "common/Settings.php";
 
 class JsonTask extends AbstractPDOTask
 {

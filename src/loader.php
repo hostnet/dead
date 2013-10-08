@@ -1,5 +1,7 @@
 <?php
 
+require_once "__DIR__/../vendor/autoload.php";
+
 if (PHP_SAPI == "cli") {
     $time_start = microtime(true);
 
@@ -21,14 +23,10 @@ if (PHP_SAPI == "cli") {
     ini_set('display_errors', '1');
     error_reporting(E_ALL | E_STRICT);
 }
-// Pear hack
-$path = __DIR__ . DIRECTORY_SEPARATOR . "pear";
-set_include_path(
-        get_include_path() . PATH_SEPARATOR . $path . PATH_SEPARATOR . __DIR__);
-require_once "common/Settings.php";
+
+set_include_path(get_include_path() . PATH_SEPARATOR .  __DIR__);
 
 if (PHP_SAPI == "cli") {
-    require_once "task/TaskRunner.php";
     TaskRunner::main();
 
     $settings = Settings::instance();

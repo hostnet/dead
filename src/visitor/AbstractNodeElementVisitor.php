@@ -1,6 +1,5 @@
 <?php
 
-require_once "INodeElementVisitor.php";
 
 abstract class AbstractNodeElementVisitor implements INodeElementVisitor {
 	public function visitDynamicAnalysis(DynamicAnalysis &$dynamicAnalysis) {

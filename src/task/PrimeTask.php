@@ -1,11 +1,4 @@
 <?php
-require_once "AbstractPDOTask.php";
-require_once "tree/FileTreeFactory.php";
-require_once "tree/PDOTreeFactory.php";
-require_once "visitor/SubversionVisitor.php";
-require_once "visitor/GitVisitor.php";
-require_once "visitor/PrimeVisitor.php";
-require_once "common/Settings.php";
 
 class PrimeTask extends AbstractPDOTask
 {

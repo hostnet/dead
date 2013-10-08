@@ -1,5 +1,4 @@
 <?php
-require_once "common/Settings.php";
 
 class TaskRunner
 {
@@ -11,9 +10,7 @@ class TaskRunner
     {
         $filename = "task/$name.php";
         if (file_exists($filename)) {
-            require_once $filename;
         } elseif (file_exists("phar://dead/$filename")) {
-            require_once "phar://dead/$filename";
         }
     }
 

@@ -3,15 +3,15 @@ FILES=$(wildcard src/*)
 
 all: dead.phar
 
-dead.phar: $(FILES) clean
+dead.phar: $(FILES) clean composer
 	php -d phar.readonly=false -r " \
 	\$$phar = new Phar('dead.phar'); \
-	\$$phar->buildFromDirectory('src'); \
-	\$$phar->setStub('#!/usr/bin/env php'. PHP_EOL .\$$phar->createDefaultStub('loader.php'));"
+	\$$phar->buildFromDirectory('.','/src.*|vendor.*/'); \
+	\$$phar->setStub('#!/usr/bin/env php'. PHP_EOL .\$$phar->createDefaultStub('src/loader.php'));"
 	chmod +x dead.phar
 
 clean:
-	rm -f lucina.phar
+	rm -f dead.phar
 
 install:
 	cp -f dead.phar /usr/lib
@@ -23,3 +23,6 @@ deinstall:
 
 smoke: dead.phar
 	./dead.phar
+
+composer:
+	./composer.phar install

@@ -1,8 +1,4 @@
 <?php
-require_once "AbstractTreeFactory.php";
-require_once "elements/DynamicAnalysis.php";
-require_once "elements/FileChange.php";
-require_once "elements/Versioning.php";
 
 /**
  * @author Hidde Boomsma <hidde@hostnet.nl>

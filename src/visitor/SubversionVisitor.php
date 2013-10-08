@@ -1,5 +1,4 @@
 <?php
-require_once "AbstractVersioningVisitor.php";
 
 class SubversionVisitor extends AbstractVersioningVisitor {
 	private $svnCommand = "/usr/bin/env svn";

@@ -1,6 +1,4 @@
 <?php
-require_once "ITask.php";
-require_once "tree/PDOTreeFactory.php";
 
 class BenchTask implements ITask {
 	private function addTable($factory, $table) {

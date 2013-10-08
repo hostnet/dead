@@ -1,5 +1,4 @@
 <?php
-require_once('elements/INodeElement.php');
 
 class Node implements INodeElement
 {

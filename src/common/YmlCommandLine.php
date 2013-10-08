@@ -1,6 +1,4 @@
 <?php
-require_once "Console/CommandLine.php";
-require_once "common/yml/sfYamlParser.php";
 
 class YmlCommandLine extends Console_CommandLine
 {

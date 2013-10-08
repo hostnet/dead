@@ -1,5 +1,4 @@
 <?php
-require_once("AbstractNodeElementVisitor.php");
 
 class PDOCacheTreeVisitor extends AbstractNodeElementVisitor
 {

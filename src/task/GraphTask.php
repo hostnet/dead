@@ -1,5 +1,4 @@
 <?php
-require_once "ITask.php";
 class GraphTask implements ITask {
 
   public function run()

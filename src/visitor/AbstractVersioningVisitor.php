@@ -1,6 +1,4 @@
 <?php
-require_once("AbstractNodeElementVisitor.php");
-require_once("tree/elements/Versioning.php");
 
 abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitor
 {
