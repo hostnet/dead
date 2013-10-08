@@ -1,1 +1,3 @@
-../src/loader.php
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/../src/loader.php';

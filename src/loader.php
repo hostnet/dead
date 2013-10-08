@@ -1,7 +1,6 @@
-#!/usr/bin/env php
 <?php
 
-require_once "__DIR__/../vendor/autoload.php";
+require_once __DIR__ .'/../vendor/autoload.php';
 
 if (PHP_SAPI == "cli") {
     $time_start = microtime(true);
