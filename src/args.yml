@@ -125,7 +125,7 @@ commands:
         optional: true
         description: path to get the json for
         action: StoreString
-        default: "/"        
+        default: ""
   graph:
     description: create various visualizations
     options:
