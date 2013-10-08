@@ -4,7 +4,7 @@ class Gnuplot
 {
   const BUFFER_LENGTH = 1024;
   
-  private static $gnuplotCommand = "/usr/bin/env gnuplot";
+  private static $gnuplotCommand = "gnuplot";
 
   public static function plot($commands, array $data, $stderr = true)
   {
@@ -16,8 +16,8 @@ class Gnuplot
     if(is_resource($proc)) {
       fwrite($pipe[0], $commands);
       
-      foreach($data as $set) {	
-      	fwrite($pipe[0], $set);
+      foreach($data as $set) 
+        write($pipe[0], $set);
         fwrite($pipe[0], "\n\ne\n");
       }
       fclose($pipe[0]);
