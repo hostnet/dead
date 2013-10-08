@@ -22,5 +22,6 @@
     ],
     "autoload": {
         "classmap": ["src/"]
-    }
+    },
+    "bin": [ "bin/dead" ]
 }
