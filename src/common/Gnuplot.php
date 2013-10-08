@@ -16,7 +16,7 @@ class Gnuplot
     if(is_resource($proc)) {
       fwrite($pipe[0], $commands);
       
-      foreach($data as $set) 
+      foreach($data as $set) {
         write($pipe[0], $set);
         fwrite($pipe[0], "\n\ne\n");
       }
