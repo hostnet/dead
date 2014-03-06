@@ -14,40 +14,45 @@ class PrimeTask extends AbstractPDOTask
   {
     parent::__construct();
     $settings = Settings::instance();
+    
     $path = $settings->getCommand()->getArgument("path");
+    $path = $this->fixTrailingDirectorySeperator($path);
 
-    //Make sure the path ends with a separatpr (/ on linux, mac and unix)
-    if(substr($path, -1, 1) != DIRECTORY_SEPARATOR) {
-      $path .= DIRECTORY_SEPARATOR;
-    }
-
-    $this->path = $path;
-    $this->vcs = $settings->getCommand()->getOption("vcs");
+    $prefix = $settings->getCommand()->getOption("prefix");
+    $prefix = $this->fixTrailingDirectorySeperator($prefix);
+    
+    $this->path   = $path;
+    $this->prefix = $prefix;
+    $this->vcs    = $settings->getCommand()->getOption("vcs");
   }
 
+  /**
+   * Make sure the path ends with a separator (/ on linux, mac and unix)
+   * @param $path string the path that sould be fixed
+   * @return string
+   */
+  private function fixTrailingDirectorySeperator($path) {
+      if(substr($path, -1, 1) != DIRECTORY_SEPARATOR) {
+          $path .= DIRECTORY_SEPARATOR;
+      }
+      return $path;
+  }
+  
   /**
    *
    * @param $list array[]Node
    * @return array[string]PrimeData
    */
-
-  private function getPrimeData(array $list)
+  private function getPrimeData(array $list, $prefix = null)
   {
     // Create PrimeVisitor for fetching data
     $visitor = new PrimeVisitor();
+    $visitor->setPrefix($prefix);
 
     foreach(array_keys($list) as $key) {
       $list[$key]->accept($visitor);
     }
     return $visitor->getPrimeData();
-  }
-
-  private function getFileNodes()
-  {
-    // Read all file names from disk
-    $factory = new FileTreeFactory();
-    $factory->scan($this->path);
-    return $factory->produceList();
   }
 
   private function &addVersioning(&$list, INodeElementVisitor $visitor)
@@ -70,24 +75,36 @@ class PrimeTask extends AbstractPDOTask
 
   public function run()
   {
-    $file = $this->getFileNodes();
-    echo "read all files from disk into list\n";
-
     if($this->vcs == self::SVN) {
+      /*
+       * SVN
+       */
+      $file = (new FileTreeFactory())->scan($this->path)->produceList();
+      echo "read all files from disk into list\n";
       $visitor = new SubversionVisitor($this->path);
       $this->addVersioning($file, $visitor);
       echo "added versioning info from svn to disk file list\n";
     } elseif($this->vcs == self::GIT) {
+      /*
+       * GIT
+       */
+      $file = (new GitFileTreeFactory())->scan($this->path)->produceList();
+      echo "read all files from disk into list\n";
       $visitor = new GitVisitor($this->path);
       $this->addVersioning($file, $visitor);
       echo "added versioning info from git to disk file list\n";
     } elseif($this->vcs == self::NONE) {
+      /*
+       * NONE
+       */
+      $file = (new FileTreeFactory())->scan($this->path)->produceList();
+      echo "read all files from disk into list\n";
       echo "No versioning info added (no vcs specified)\n";
     }
 
-    $file = $this->getPrimeData($file);
+    $file = $this->getPrimeData($file, $this->prefix);
     echo "parsed all disk data into prime data\n";
-
+   
     $db = $this->getDbNodes();
     echo "read all entries from database into list\n";
     $db = $this->getPrimeData($db);
@@ -96,7 +113,7 @@ class PrimeTask extends AbstractPDOTask
     // Find new and deleted files
     $new = array_diff_key($file, $db);
     $removed = array_diff_key($db, $file);
-
+   
     // Remove them from the original sets
     $db = array_intersect_key($db, $file);
     $file = array_intersect_key($file, $db);
@@ -104,14 +121,13 @@ class PrimeTask extends AbstractPDOTask
     // Search for differences form local files
     // data comapred to the database
     $diff = array_diff_assoc($file, $db);
-
+   
     // Commit all data to the database
     $this->getDb()->beginTransaction();
     $this->insertNew($new);
     $this->updateDead($removed);
     $this->updateChanged($diff, $db);
     $this->getDb()->commit();
-
   }
 
   private function updateChanged(array $diff, array $db)
@@ -127,6 +143,7 @@ class PrimeTask extends AbstractPDOTask
         $sql .= sprintf($query, $changedAt, $currentChangedAt, $file);
       }
 
+      $sql;
       $this->getDb()->exec($sql);
     }
   }
@@ -162,7 +179,7 @@ class PrimeTask extends AbstractPDOTask
       $table = $this->getTable();
       $values = implode("\",\"", array_keys($removed));
       $query =
-        "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND file IN (\"$values\") AND file LIKE \"$this->path%\"";
+        "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND file IN (\"$values\")";
       $this->getDb()->exec($query);
     }
   }

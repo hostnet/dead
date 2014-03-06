@@ -76,6 +76,10 @@ commands:
         default: none
         choices: [none,svn,git]
         add_list_option: true
+      prefix:
+        short_name: -p
+        long_name: --prefix
+        description: prefix directory for relative paths
     arguments:
       path:
         description: The path to read the files from for priming

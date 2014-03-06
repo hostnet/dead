@@ -1,9 +1,12 @@
 <?php
 
-class FileTreeFactory extends AbstractTreeFactory
+class GitFileTreeFactory extends AbstractTreeFactory
 {
+
     private $files = array();
-    
+
+    private $git_command = 'git ls-tree -r --full-tree HEAD --name-only';
+
     /**
      *
      * @param $path string            
@@ -13,29 +16,21 @@ class FileTreeFactory extends AbstractTreeFactory
     public function scan($path, $extension = 'php')
     {
         try {
-            $directory_iterator = new RecursiveDirectoryIterator($path);
-            $recursive_iterator = new RecursiveIteratorIterator($directory_iterator);
-            $filter_iterator = new FileInfoFilterIterator($recursive_iterator);
+            $path = realpath($path);
+            $handle = popen('cd ' . escapeshellarg($path) . ' && ' . $this->git_command, 'r');
+            $resource_iterator = new ResourceIterator($handle);
+            $filter_iterator = new FileInfoFilterIterator($resource_iterator);
             $filter_iterator->setFindExtension($extension);
-            $path_length = strlen($path);
+            
             foreach ($filter_iterator as $file) {
-                    $this->addFile($file->getPathname());
+                    $this->files[] = new Node($path . DIRECTORY_SEPARATOR . $file, $file);
             }
+            pclose($handle);
         } catch (UnexpectedValueException $e) {
             echo "Could not open dir $path" . PHP_EOL;
         } catch (Exception $e) {
             die($e->getMessage());
         }
-        return $this;
-    }
-
-    /**
-     *
-     * @param $filename string            
-     */
-    public function addFile($filename)
-    {
-        $this->files[] = new Node($filename);
         return $this;
     }
 

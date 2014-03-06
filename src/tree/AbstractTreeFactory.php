@@ -1,7 +1,7 @@
 <?php
 
 abstract class AbstractTreeFactory implements ITreeFactory{
-	/**
+    /**
 	 *
 	 * @return Tree
 	 */
@@ -24,5 +24,3 @@ abstract class AbstractTreeFactory implements ITreeFactory{
 		return $root;
 	}
 }
-
-?>

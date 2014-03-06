@@ -25,18 +25,18 @@ class GitVisitor extends AbstractVersioningVisitor
     // Lookup all commits if still needed
     if($this->commits === null) {
       $this->commits = $this->getAllCommitsRecursive();
-      echo "last commit: ";
-      print_r(current($this->commits));
-      echo "\n";
     }
 
-    $path = realpath($file);
+    // Do not do realpath for a bare repository
+    if(file_exists($file)) {
+        $file = realpath($file);
+    }
 
     // Check for existance of the file
-    if(isset($this->commits[$path])) {
-      return $this->commits[$path];
+    if(isset($this->commits[$file])) {
+      return $this->commits[$file];
     } else {
-      echo "$path not found in Git repository.\n";
+      echo "$file not found in Git repository.\n";
       return array();
     }
   }

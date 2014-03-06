@@ -3,3 +3,4 @@ dead.phar
 .buildpath
 .project
 /vendor/*
+/config.yml

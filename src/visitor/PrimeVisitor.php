@@ -20,7 +20,13 @@ class PrimeVisitor extends AbstractNodeElementVisitor {
 	 */
 	private $data = array ();
 	
-	function visitVersioning(Versioning &$versioning) {
+	/**
+	 * 
+	 * @var string
+	 */
+	private $prefix = null;
+	
+	public function visitVersioning(Versioning &$versioning) {
 		$this->versioning = $versioning;
 	}
 	
@@ -47,7 +53,12 @@ class PrimeVisitor extends AbstractNodeElementVisitor {
 		if ($this->filechange !== null) {
 			$dead = is_null ( $this->filechange->getDeletedAt () );
 		}
-		$this->data [$node->getFullPath ()] = new PrimeData ( $changedAt, $dead );
+		
+		if($this->prefix) {
+		    $this->data [$this->prefix . $node->getPath ()] = new PrimeData ( $changedAt, $dead );
+		} else {
+		  $this->data [$node->getFullPath ()] = new PrimeData ( $changedAt, $dead );
+		}
 	}
 	
 	/**
@@ -60,6 +71,10 @@ class PrimeVisitor extends AbstractNodeElementVisitor {
 	
 	public function reset() {
 		$this->data = array ();
+	}
+	
+	public function setPrefix($prefix) {
+	    $this->prefix = $prefix;
 	}
 
 }
