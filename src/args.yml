@@ -40,8 +40,10 @@ options:
     long_name: --output
     description: the output file (use - for stdout)
     action: StoreString
-    default: "-"  
+    default: "-"
 commands:
+  tables:
+    description: show all tables in the configured database (filters the _tree tables)
   color: 
     description: generate a colors.txt file for use in eclipse
     options:
