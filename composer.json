@@ -1,7 +1,7 @@
 {
 	"name" : "hostnet/dead-tool",
 	"description" : "Dead Code Identification Toolbox",
-	"license" : "MIT",
+	"license" : "EPL-1.0",
 	"require" : {
 		"php" : ">=5.3",
 		"pear/console_commandline" : "*@dev",
