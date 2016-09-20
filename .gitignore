@@ -1,6 +1,3 @@
 dead.phar
-.settings/*
-.buildpath
-.project
-/vendor/*
+/vendor/
 /config.yml
