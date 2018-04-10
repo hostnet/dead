@@ -1,6 +1,6 @@
 <?php
 
-class TreeFactoryTest extends PHPUnit_Framework_TestCase
+class TreeFactoryTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testScan()
