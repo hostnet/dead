@@ -4,15 +4,13 @@
  */
 declare(strict_types = 1);
 
-class PHPTokensFactory
+class PhpTokensFactory
 {
 
     private $files;
 
     /**
-     * PHPTokensFactory constructor.
-     * $files is an array of Node objects.
-     * @param $files
+     * @param Node[] $files
      */
     public function __construct(array $files)
     {
@@ -20,8 +18,7 @@ class PHPTokensFactory
     }
 
     /**
-     * $files is an array of Node objects.
-     * @param $files
+     * @param Node[] $files
      * @return array
      */
     private function produceTokens(array $files): array
@@ -38,10 +35,10 @@ class PHPTokensFactory
     }
 
     /**
-     * @param $tokens_per_file
-     * @return array
+     * @param array[] $tokens_per_file
+     * @return array string
      */
-    private function produceFunctionPaths($tokens_per_file): array
+    private function produceFunctionPaths(array $tokens_per_file): array
     {
         $function_paths = [];
         foreach ($tokens_per_file as $file) {
@@ -70,11 +67,12 @@ class PHPTokensFactory
                     case T_FUNCTION:
                         $function_name = $file["tokens"][$token_index + 2][1];
 
-                        $function_path = $file["location"].
-                            (empty($namespace) ? "" : "/" . $namespace) .
-                            (empty($class) ? "" : "/" . $class) .
-                            "::".$function_name;
-
+                        $function_path = $this->getFullyQualifiedNamespace(
+                            $file["location"],
+                            $namespace,
+                            $class,
+                            $function_name
+                        );
                         array_push($function_paths, $function_path);
                         break;
                     default:
@@ -87,7 +85,39 @@ class PHPTokensFactory
     }
 
     /**
-     * @return array
+     * @param string $file_location
+     * @param string $namespace
+     * @param string $class
+     * @param $function_name
+     * @return string
+     */
+    private function getFullyQualifiedNamespace(
+        string $file_location,
+        string $namespace,
+        string $class,
+        $function_name
+    ): string {
+        $fully_qualified_namespace = $file_location."::";
+
+        if (!empty($namespace)) {
+            $fully_qualified_namespace .= $namespace;
+        }
+
+        if (!empty($namespace) && !empty($class)) {
+            $fully_qualified_namespace .= "\\";
+        }
+
+        if (!empty($class)) {
+            $fully_qualified_namespace .= $class."::";
+        }
+
+        $fully_qualified_namespace .= $function_name;
+
+        return $fully_qualified_namespace;
+    }
+
+    /**
+     * @return string[]
      */
     public function produceList(): array
     {
@@ -95,7 +125,7 @@ class PHPTokensFactory
     }
 
     /**
-     * @return array of Node objects
+     * @return Node[] array
      */
     public function getFiles(): array
     {
@@ -103,7 +133,7 @@ class PHPTokensFactory
     }
 
     /**
-     * @param array $files
+     * @param Node[] array $files
      */
     public function setFiles(array $files): void
     {
