@@ -1,9 +1,8 @@
 <?php
-declare(strict_types=1);
 /**
  * @copyright 2018 Hostnet B.V.
  */
-
+declare(strict_types=1);
 
 class FunctionPathTest extends \PHPUnit\Framework\TestCase
 {
@@ -23,8 +22,8 @@ class FunctionPathTest extends \PHPUnit\Framework\TestCase
         ];
 
         $files          = (new FileTreeFactory())->scan("./test_files")->produceList();
-        $PHP_tokens     = new PHPTokensFactory($files);
-        $function_paths = $PHP_tokens->produceList();
+        $php_tokens     = new PHPTokensFactory($files);
+        $function_paths = $php_tokens->produceList();
 
         $difference = array_diff($expected_results, $function_paths);
         $this->assertEmpty($difference, "Not all functions have been found or formatted correctly.");

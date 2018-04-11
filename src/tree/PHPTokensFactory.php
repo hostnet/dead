@@ -1,9 +1,8 @@
 <?php
-declare(strict_types=1);
-
 /**
  * @copyright 2018 Hostnet B.V.
  */
+declare(strict_types = 1);
 
 class PHPTokensFactory
 {
