@@ -1,35 +1,51 @@
 <?php
+declare(strict_types=1);
+
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
 
 class PHPTokensFactory
 {
 
     private $files;
-    private $tokensPerFile;
-    private $functionPaths;
 
-    function __construct($files)
+    /**
+     * PHPTokensFactory constructor.
+     * $files is an array of Node objects.
+     * @param $files
+     */
+    public function __construct(array $files)
     {
         $this->files = $files;
-        $this->tokensPerFile = [];
-        $this->functionPaths = [];
     }
 
-    private function produceTokens($files): array
+    /**
+     * $files is an array of Node objects.
+     * @param $files
+     * @return array
+     */
+    private function produceTokens(array $files): array
     {
-        $tokensPerFile = [];
+        $tokens_per_file = [];
         foreach ($files as $index => $file) {
-            $file_contents = file_get_contents($file->getLocation());
-            $tokens = token_get_all($file_contents);
-            $tokensPerFile[$index]["location"] = $file->getLocation();
-            $tokensPerFile[$index]["tokens"] = $tokens;
+            $file_contents                       = file_get_contents($file->getLocation());
+            $tokens                              = token_get_all($file_contents);
+            $tokens_per_file[$index]["location"] = $file->getLocation();
+            $tokens_per_file[$index]["tokens"]   = $tokens;
         }
-        return $tokensPerFile;
+
+        return $tokens_per_file;
     }
 
-    private function produceFunctionPaths($tokensPerFile): array
+    /**
+     * @param $tokens_per_file
+     * @return array
+     */
+    private function produceFunctionPaths($tokens_per_file): array
     {
-        $functionsPaths = [];
-        foreach ($tokensPerFile as $file) {
+        $function_paths = [];
+        foreach ($tokens_per_file as $file) {
             // Namespace and class values will be reset for every file.
             $namespace = "";
             // There can be multiple classes in one file, so expect this value to change
@@ -44,24 +60,23 @@ class PHPTokensFactory
                     case T_NAMESPACE:
                         $i = $token_index;
                         while ($file["tokens"][$i] !== ";") {
-                            if ($file["tokens"][$i][0] === T_WHITESPACE) {
-                                $i += 1;
-                                continue;
+                            if ($file["tokens"][$i][0] === T_NS_SEPARATOR ||
+                                $file["tokens"][$i][0] === T_STRING) {
+                                $namespace .= $file["tokens"][$i][1];
                             }
-                            $namespace .= $file["tokens"][$i][1];
                             $i += 1;
                         }
                         break;
 
                     case T_FUNCTION:
-                        $functionName = $file["tokens"][$token_index + 2][1];
+                        $function_name = $file["tokens"][$token_index + 2][1];
 
-                        $functionPath = $file["location"] .
+                        $function_path = $file["location"].
                             (empty($namespace) ? "" : "/" . $namespace) .
                             (empty($class) ? "" : "/" . $class) .
-                            "::" . $functionName;
+                            "::".$function_name;
 
-                        array_push($functionsPaths, $functionPath);
+                        array_push($function_paths, $function_path);
                         break;
                     default:
                         break;
@@ -69,19 +84,19 @@ class PHPTokensFactory
             }
         }
 
-        return $functionsPaths;
-
-    }
-
-    public function produceList(): array
-    {
-        $this->tokensPerFile = $this->produceTokens($this->files);
-        $this->functionPaths = $this->produceFunctionPaths($this->tokensPerFile);
-        return $this->functionPaths;
+        return $function_paths;
     }
 
     /**
-     * @return array files
+     * @return array
+     */
+    public function produceList(): array
+    {
+        return $this->produceFunctionPaths($this->produceTokens($this->files));
+    }
+
+    /**
+     * @return array of Node objects
      */
     public function getFiles(): array
     {
@@ -89,12 +104,10 @@ class PHPTokensFactory
     }
 
     /**
-     * @param mixed $files
+     * @param array $files
      */
-    public function setFiles($files): void
+    public function setFiles(array $files): void
     {
         $this->files = $files;
     }
-
-
 }

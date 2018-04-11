@@ -1,8 +1,12 @@
-<?php 
-class GitFileTreeFactoryTest extends \PHPUnit\Framework\TestCase
+<?php
+
+use PHPUnit\Framework\TestCase;
+
+class GitFileTreeFactoryTest extends TestCase
 {
-	public function testScan() {
-		$factory = new GitFileTreeFactory();
-		$factory->scan('.');
+    public function testScan()
+    {
+	    $factory = new GitFileTreeFactory();
+	    $factory->scan('.');
 	}
 }

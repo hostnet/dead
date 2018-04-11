@@ -1,31 +1,21 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sveken
- * Date: 4/10/18
- * Time: 10:50 AM
- */
-
-namespace Hades\TestNamespace;
-
+declare(strict_types=1);
+namespace Dead\TestNamespace;
 
 class ClassC
 {
-    function test3()
+    private function test4()
     {
-
     }
 }
 
 function test5()
 {
-
 }
 
 class ClassD
 {
-    function test4()
+    private function test6()
     {
-
     }
 }

@@ -1,20 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sveken
- * Date: 4/10/18
- * Time: 10:49 AM
- */
+declare(strict_types=1);
 
 class ClassB
 {
-    function __construct()
+    public function __construct()
     {
     }
 
-    function test2()
+    private function test3()
     {
-        function inTest2()
+        function inTest3()
         {
         }
     }

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sveken
- * Date: 4/10/18
- * Time: 10:48 AM
- */
+declare(strict_types=1);
 
 function test1()
 {
@@ -13,7 +8,8 @@ function test1()
     }
 }
 
-function test2 () {
+function test2()
+{
 
 }
 
