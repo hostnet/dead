@@ -8,11 +8,11 @@
     </rule>
     <rule ref="Generic.Files.OneClassPerFile.MultipleFound">
         <!-- Special test where there are multiple classes in a file -->
-        <exclude-pattern>tests/test_files/ClassC.php</exclude-pattern>
+        <exclude-pattern>tests/fixtures/ClassC.php</exclude-pattern>
     </rule>
     <rule ref="Squiz.Classes.ClassFileName.NoMatch">
         <!-- Special test where there are multiple classes in a file -->
-        <exclude-pattern>tests/test_files/ClassC.php</exclude-pattern>
+        <exclude-pattern>tests/fixtures/ClassC.php</exclude-pattern>
     </rule>
     <rule ref="PEAR.Files.IncludingFile.UseIncludeOnce">
         <!-- require_once is intended behavior -->
@@ -23,9 +23,6 @@
     <exclude-pattern>src/task/</exclude-pattern>
     <exclude-pattern>src/tree/(?!(PHPTokensFactory.php))</exclude-pattern>
     <exclude-pattern>src/visitor/</exclude-pattern>
-
-    <exclude-pattern>tests/tree/GitFileTreeFactoryTest.php</exclude-pattern>
-    <exclude-pattern>tests/tree/FileTreeFactoryTest.php</exclude-pattern>
 
     <rule ref="Hostnet"/>
 </ruleset>
