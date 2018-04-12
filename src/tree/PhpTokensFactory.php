@@ -6,7 +6,6 @@ declare(strict_types = 1);
 
 class PhpTokensFactory
 {
-
     private $files;
 
     /**
@@ -65,15 +64,14 @@ class PhpTokensFactory
                         break;
 
                     case T_FUNCTION:
-                        $function_name = $file["tokens"][$token_index + 2][1];
-
-                        $function_path = $this->getFullyQualifiedNamespace(
+                        $function_name    = $file["tokens"][$token_index + 2][1];
+                        $function_path    = $this->getFullyQualifiedNamespace(
                             $file["location"],
                             $namespace,
                             $class,
                             $function_name
                         );
-                        array_push($function_paths, $function_path);
+                        $function_paths[] = $function_path;
                         break;
                     default:
                         break;
@@ -84,18 +82,11 @@ class PhpTokensFactory
         return $function_paths;
     }
 
-    /**
-     * @param string $file_location
-     * @param string $namespace
-     * @param string $class
-     * @param $function_name
-     * @return string
-     */
     private function getFullyQualifiedNamespace(
         string $file_location,
         string $namespace,
         string $class,
-        $function_name
+        string $function_name
     ): string {
         $fully_qualified_namespace = $file_location."::";
 
@@ -111,9 +102,7 @@ class PhpTokensFactory
             $fully_qualified_namespace .= $class."::";
         }
 
-        $fully_qualified_namespace .= $function_name;
-
-        return $fully_qualified_namespace;
+        return $fully_qualified_namespace.$function_name;
     }
 
     /**

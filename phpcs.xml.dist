@@ -14,6 +14,10 @@
         <!-- Special test where there are multiple classes in a file -->
         <exclude-pattern>tests/test_files/ClassC.php</exclude-pattern>
     </rule>
+    <rule ref="PEAR.Files.IncludingFile.UseIncludeOnce">
+        <!-- require_once is intended behavior -->
+        <exclude-pattern>src/loader.php</exclude-pattern>
+    </rule>
 
     <exclude-pattern>src/common/</exclude-pattern>
     <exclude-pattern>src/task/</exclude-pattern>
