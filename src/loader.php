@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright 2012-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
 if (file_exists(__DIR__ .'/../vendor/autoload.php')) {
     require_once __DIR__ .'/../vendor/autoload.php';
@@ -39,10 +43,13 @@ if (PHP_SAPI == "cli") {
 
         $time = str_pad(sprintf("%10.5f seconds", $time_end - $time_start), 18);
         $peak = str_pad(
-                sprintf("%10.5f MiB", memory_get_peak_usage() / 1024 / 1024),
-                18);
-        $mem = str_pad(
-                sprintf("%10.5f MiB", memory_get_usage() / 1024 / 1024), 18);
+            sprintf("%10.5f MiB", memory_get_peak_usage() / 1024 / 1024),
+            18
+        );
+        $mem  = str_pad(
+            sprintf("%10.5f MiB", memory_get_usage() / 1024 / 1024),
+            18
+        );
 
         fwrite(STDERR, "╔═══════════════════════════════════╗" . PHP_EOL);
         fwrite(STDERR, "║ time:         $time  ║" . PHP_EOL);

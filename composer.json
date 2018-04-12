@@ -1,32 +1,29 @@
 {
-	"name" : "hostnet/dead-tool",
-	"description" : "Dead Code Identification Toolbox",
-	"license" : "EPL-1.0",
-	"require" : {
-		"php" : ">=5.3",
-		"pear/console_commandline" : "*@dev",
-		"pear/pear_exception" : "*@dev"
-	},
-	"minimum-stability" : "stable",
-	"repositories" : [{
-			"type" : "composer",
-			"url" : "http://packagist.hostnetbv.nl"
-		}
-	],
-	"authors" : [{
-			"name" : "Hidde Boomsma",
-			"email" : "hboomsma@hostnet.nl"
-		}
-	],
-	"autoload" : {
-		"classmap" : [
-			"src/"
-		]
-	},
-	"bin" : [
-		"bin/dead"
-	],
-	"require-dev" : {
-		"phpunit/phpunit" : "3.7.*"
-	}
+    "name":              "hostnet/dead-tool",
+    "description":       "Dead Code Identification Toolbox",
+    "license":           "MIT",
+    "minimum-stability": "stable",
+    "require": {
+        "php":                      ">=7.1",
+        "pear/console_commandline": "*@dev",
+        "pear/pear_exception":      "*@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0.3",
+        "hostnet/phpcs-tool": "^5.3"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    },
+    "bin": [
+        "bin/dead"
+    ],
+    "repositories": [
+        {
+            "type": "composer",
+            "url":  "https://packagist.hostnetbv.nl"
+        }
+    ]
 }

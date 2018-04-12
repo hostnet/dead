@@ -1,6 +1,12 @@
 <?php
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
 
-class TreeFactoryTest extends PHPUnit_Framework_TestCase
+declare(strict_types=1);
+use PHPUnit\Framework\TestCase;
+
+class FileTreeFactoryTest extends TestCase
 {
 
     public function testScan()
