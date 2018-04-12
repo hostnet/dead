@@ -27,6 +27,6 @@ class FunctionPathTest extends TestCase
         $php_tokens     = new PhpTokensFactory($files);
         $function_paths = $php_tokens->produceList();
         $difference     = array_diff($expected_results, $function_paths);
-        $this::assertEmpty($difference, "Not all functions have been found or formatted correctly.");
+        self::assertEmpty($difference, "Not all functions have been found or formatted correctly.");
     }
 }
