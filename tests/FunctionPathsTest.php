@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
-class FunctionPathTest extends TestCase
+class FunctionPathsTest extends TestCase
 {
     public function testRun()
     {
@@ -24,7 +24,7 @@ class FunctionPathTest extends TestCase
         ];
 
         $files          = (new FileTreeFactory())->scan("./fixtures")->produceList();
-        $php_tokens     = new PhpTokensFactory($files);
+        $php_tokens     = new FunctionPathsFactory($files);
         $function_paths = $php_tokens->produceList();
         $difference     = array_diff($expected_results, $function_paths);
         self::assertEmpty($difference, "Not all functions have been found or formatted correctly.");

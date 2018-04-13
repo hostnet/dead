@@ -4,7 +4,7 @@
  */
 declare(strict_types = 1);
 
-class PhpTokensFactory
+class FunctionPathsFactory
 {
     private $files;
 
