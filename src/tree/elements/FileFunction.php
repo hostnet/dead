@@ -22,6 +22,5 @@ class FileFunction implements INodeElement
     public function accept(INodeElementVisitor $visitor): void
     {
         $visitor->visitFunctionName($this);
-        return;
     }
 }
