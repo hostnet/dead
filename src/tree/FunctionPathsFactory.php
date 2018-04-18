@@ -23,7 +23,7 @@ class FunctionPathsFactory
 
     /**
      * @param array $file
-     * @return array string
+     * @return FileFunction[]
      */
     private function produceFunctionPaths(array $file): array
     {
@@ -53,7 +53,7 @@ class FunctionPathsFactory
 
                 case T_FUNCTION:
                     $function_name    = $file["tokens"][$token_index + 2][1];
-                    $function_paths[] = $this->getFullyQualifiedNamespace(
+                    $function_paths[] = $this->generateFileFunction(
                         $file["location"],
                         $namespace,
                         $class,
@@ -68,7 +68,7 @@ class FunctionPathsFactory
         return $function_paths;
     }
 
-    private function getFullyQualifiedNamespace(
+    private function generateFileFunction(
         string $file_location,
         string $namespace,
         string $class,
@@ -93,7 +93,7 @@ class FunctionPathsFactory
 
     /**
      * @param Node $file
-     * @return string[]
+     * @return FileFunction[]
      */
     public function produceList(Node $file): array
     {
