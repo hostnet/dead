@@ -5,7 +5,7 @@
 
 declare(strict_types=1);
 
-class FileFunction implements INodeElement
+class FileFunction implements NodeElementInterface
 {
     private $function;
 
@@ -19,7 +19,7 @@ class FileFunction implements INodeElement
         return $this->function;
     }
 
-    public function accept(INodeElementVisitor $visitor): void
+    public function accept(NodeElementVisitorInterface $visitor): void
     {
         $visitor->visitFunctionName($this);
     }

@@ -1,183 +1,106 @@
 <?php
+/**
+ * @copyright 2012-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
-class PrimeVisitor extends AbstractNodeElementVisitor {
-	
-	/**
-	 *
-	 * @var FileChange
-	 */
-	private $filechange = null;
-	
-	/**
-	 *
-	 * @var Versioning
-	 */
-	private $versioning = null;
+class PrimeVisitor extends AbstractNodeElementVisitorInterface
+{
+
+    /**
+     *
+     * @var FileChange
+     */
+    private $file_change = null;
+
+    /**
+     *
+     * @var Versioning
+     */
+    private $versioning = null;
 
     /**
      * @var FileFunction[]
      */
-	private $functions = [];
-
-	/**
-	 *
-	 * @var array[string]PrimeData
-	 */
-	private $data = array ();
-	
-	/**
-	 * 
-	 * @var string
-	 */
-	private $prefix = null;
-	
-	public function visitVersioning(Versioning &$versioning) {
-		$this->versioning = $versioning;
-	}
-	
-	public function visitFileChange(FileChange &$fileChange) {
-		$this->fileChange = $fileChange;
-	}
-
-	public function visitFunctionName(FileFunction $file_function)
-	{
-		$this->functions[] = $file_function->getFunction();
-	}
-
-	public function visitNode(Node &$node) {
-		$changedAt = "";
-		$dead = false;
-		$file_functions = [];
-
-		if ($this->versioning !== null) {
-			$lastChange = $this->versioning->getLastChange();
-			if($lastChange !== null) {
-			
-			$timezone = new DateTimeZone(date_default_timezone_get());
-			
-			$lastChange->setTimezone($timezone);
-			$changedAt  = $lastChange->format("Y-m-d H:i:s");
-			}
-			$this->versioning = null;
-		}
-		
-		if ($this->filechange !== null) {
-			$dead = is_null ( $this->filechange->getDeletedAt () );
-		}
-
-		foreach ($this->functions as $function) {
-			$file_functions[] = $function;
-		}
-
-		$prime_data = new PrimeData ( $changedAt, $dead, $file_functions);
-
-		if($this->prefix) {
-			$this->data [$this->prefix . $node->getPath ()] = $prime_data;
-		} else {
-			$this->data [$node->getFullPath ()] = $prime_data;
-		}
-	}
-	
-	/**
-	 *
-	 * @return array[int]PrimeData
-	 */
-	public function getPrimeData() {
-		return $this->data;
-	}
-	
-	public function reset() {
-		$this->data = array ();
-	}
-	
-	public function setPrefix($prefix) {
-	    $this->prefix = $prefix;
-	}
-
-}
-
-class PrimeData {
-	
-	/**
-	 *
-	 * @var string
-	 */
-	private $changedAt;
-	
-	/**
-	 *
-	 * @var boolean
-	 */
-	private $dead;
+    private $functions = [];
 
     /**
-     * @var FileFunction[]
+     *
+     * @var array[string]PrimeData
      */
-    private $file_functions;
+    private $data = array();
 
     /**
-     * @param FileFunction[]
+     *
+     * @var string
      */
-    public function setFileFunctions(array $file_functions): void
+    private $prefix = null;
+
+    public function visitVersioning(Versioning &$versioning)
     {
-        $this->file_functions = $file_functions;
+        $this->versioning = $versioning;
+    }
+
+    public function visitFileChange(FileChange &$file_change)
+    {
+        $this->file_change = $file_change;
+    }
+
+    public function visitFunctionName(FileFunction $file_function)
+    {
+        $this->functions[] = $file_function->getFunction();
+    }
+
+    public function visitNode(Node &$node)
+    {
+        $changed_at     = "";
+        $dead           = false;
+        $file_functions = [];
+
+        if ($this->versioning !== null) {
+            $last_change = $this->versioning->getLastChange();
+            if ($last_change !== null) {
+                $timezone = new DateTimeZone(date_default_timezone_get());
+
+                $last_change->setTimezone($timezone);
+                $changed_at = $last_change->format("Y-m-d H:i:s");
+            }
+            $this->versioning = null;
+        }
+
+        if ($this->file_change !== null) {
+            $dead = is_null($this->file_change->getDeletedAt());
+        }
+
+        foreach ($this->functions as $function) {
+            $file_functions[] = $function;
+        }
+
+        $prime_data = new PrimeData($changed_at, $dead, $file_functions);
+
+        if ($this->prefix) {
+            $this->data [$this->prefix.$node->getPath()] = $prime_data;
+        } else {
+            $this->data [$node->getFullPath()] = $prime_data;
+        }
     }
 
     /**
-     * @return FileFunction[]
+     *
+     * @return array[int]PrimeData
      */
-    public function getFileFunctions(): array
+    public function getPrimeData()
     {
-        return $this->file_functions;
+        return $this->data;
     }
 
-	/**
-	 *
-	 * @return string
-	 */
-	public function getChangedAt() {
-		return $this->changedAt;
-	}
-	
-	public function getSQLChangedAt() {
-		if ($this->changedAt !== "") {
-			return "\"$this->changedAt\"";
-		}	else {
-			return "NULL";
-		}
-	}
-	
-	/**
-	 *
-	 * @return boolean
-	 */
-	public function getDead() {
-		return $this->dead;
-	}
+    public function reset()
+    {
+        $this->data = array();
+    }
 
-	/**
-	 *
-	 * @param int $changedAt string
-	 * @param $dead boolean
-	 * @param FileFunction[] $file_functions
-	 */
-	public function __construct($changedAt = 0, $dead = false, $file_functions = [])
-	{
-		assert ( is_string ( $changedAt ) );
-		assert ( is_bool ( $dead ) );
-		assert(is_array($file_functions));
-
-		$this->changedAt = $changedAt;
-		$this->dead = $dead;
-		$this->file_functions = $file_functions;
-
-	}
-	
-	public function __toString() {
-		//$date = substr($this->changedAt,0,19);
-		$date = $this->changedAt;
-		return "<PrimeDate changedAt=\"$date\">";
-	}
-
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+    }
 }
-?>

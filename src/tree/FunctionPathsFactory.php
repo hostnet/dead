@@ -2,7 +2,7 @@
 /**
  * @copyright 2018 Hostnet B.V.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 class FunctionPathsFactory
 {
@@ -17,7 +17,7 @@ class FunctionPathsFactory
 
         return [
             "location" => $file->getLocation(),
-            "tokens" => $tokens,
+            "tokens"   => $tokens,
         ];
     }
 
@@ -88,7 +88,7 @@ class FunctionPathsFactory
             $fully_qualified_namespace .= $class."::";
         }
 
-        return new FileFunction($fully_qualified_namespace . $function_name);
+        return new FileFunction($fully_qualified_namespace.$function_name);
     }
 
     /**

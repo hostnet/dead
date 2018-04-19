@@ -1,91 +1,100 @@
 <?php
+/**
+ * @copyright 2012-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
-class FileChange implements INodeElement {
-	
-	/**
-	 * Date and time when the file was added to
-	 * the system under inspection.
-	 * 
-	 * @var DateTime
-	 */
-	private $addedAt;
-	
-	/**
-	 * Date and time when the file was removed
-	 * from the system under inspection.
-	 * 
-	 * @var DateTime
-	 */
-	private $deletedAt;
-	
-	
-	/**
-	 * The number of children the Node has
-	 * @var int
-	 */
-	private $children;
-	
-	/**
-	 * @see self::$count
-	 * @return int
-	 */
-	public function getCount() {
-		return $this->count;
-	}
+class FileChange implements NodeElementInterface
+{
 
-	/**
-	 * @return DateTime
-	 */
-	public function getFirstHit() {
-		return $this->firstHit;
-	}
+    /**
+     * Date and time when the file was added to
+     * the system under inspection.
+     *
+     * @var DateTime
+     */
+    private $added_at;
 
-	/**
-	 * @return DateTime
-	 * @see self::lastHit
-	 */
-	public function getLastHit() {
-		return $this->lastHit;
-	}
-
-	/**
-	 * @return DateTime
-	 * @see self::addedAt
-	 */
-	public function getAddedAt() {
-		return $this->addedAt;
-	}
-
-	/**
-	 * @return DateTime
-	 * @see self::$deletedAt
-	 */
-	public function getDeletedAt() {
-		return $this->deletedAt;
-	}
+    /**
+     * Date and time when the file was removed
+     * from the system under inspection.
+     *
+     * @var DateTime
+     */
+    private $deleted_at;
 
 
-	/**
-	 * @param DateTime $addedAt
-	 * @param DateTime $deletedAt
-	 */
-	public function __construct($addedAt, $deletedAt) {
+    /**
+     * The number of children the Node has
+     * @var int
+     */
+    private $children;
 
-		$this->addedAt = $addedAt;
-		$this->deletedAt = $deletedAt;
+    /**
+     * @see self::$count
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count;
+    }
 
-	}
-	
-	
-	public function accept(INodeElementVisitor $visitor) {
-		$visitor->visitFileChange( $this );
-	}
-	
-	
-	
-	
-	
-	public function __toString() {
-		return "<FileChange/>";
-	}
+    /**
+     * @return DateTime
+     */
+    public function getFirstHit()
+    {
+        return $this->firstHit;
+    }
+
+    /**
+     * @return DateTime
+     * @see self::lastHit
+     */
+    public function getLastHit()
+    {
+        return $this->lastHit;
+    }
+
+    /**
+     * @return DateTime
+     * @see self::addedAt
+     */
+    public function getAddedAt()
+    {
+        return $this->added_at;
+    }
+
+    /**
+     * @return DateTime
+     * @see self::$deletedAt
+     */
+    public function getDeletedAt()
+    {
+        return $this->deleted_at;
+    }
+
+
+    /**
+     * @param DateTime $added_at
+     * @param DateTime $deleted_at
+     */
+    public function __construct($added_at, $deleted_at)
+    {
+
+        $this->added_at   = $added_at;
+        $this->deleted_at = $deleted_at;
+    }
+
+
+    public function accept(NodeElementVisitorInterface $visitor)
+    {
+        $visitor->visitFileChange($this);
+    }
+
+
+    public function __toString()
+    {
+        return "<FileChange/>";
+    }
 }

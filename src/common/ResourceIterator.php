@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright 2014-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
 class ResourceIterator implements Iterator
 {
@@ -34,7 +38,7 @@ class ResourceIterator implements Iterator
 
     public function valid()
     {
-        return ! feof($this->handle);
+        return !feof($this->handle);
     }
 
     public function rewind()

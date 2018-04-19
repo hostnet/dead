@@ -1,6 +1,10 @@
 <?php
+/**
+ * @copyright 2012-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
-class EclipseColorVisitor extends AbstractNodeElementVisitor
+class EclipseColorVisitor extends AbstractNodeElementVisitorInterface
 {
     /**
      * @var Resource
@@ -9,12 +13,12 @@ class EclipseColorVisitor extends AbstractNodeElementVisitor
     private $count;
     private $cutoff;
 
-    private $dynamicAnalysis;
+    private $dynamic_analysis;
 
-    public function __construct($filename, $workspacePath = "")
+    public function __construct($filename, $workspace_path = "")
     {
         $this->stream = fopen($filename, 0x777);
-        $this->cutoff = $workspacePath;
+        $this->cutoff = $workspace_path;
     }
 
     public function __destruct()
@@ -23,11 +27,11 @@ class EclipseColorVisitor extends AbstractNodeElementVisitor
     }
 
     /**
-     * @param DynamicAnalysis $dynamicAnalysis
+     * @param DynamicAnalysis $dynamic_analysis
      */
-    public function visitDynamicAnalysis(DynamicAnalysis &$dynamicAnalysis)
+    public function visitDynamicAnalysis(DynamicAnalysis &$dynamic_analysis)
     {
-        $this->dynamicAnalysis = &$dynamicAnalysis;
+        $this->dynamic_analysis = &$dynamic_analysis;
     }
 
     public function visitNodeFirst(Node &$node)
@@ -40,15 +44,15 @@ class EclipseColorVisitor extends AbstractNodeElementVisitor
      * Now we know all elements of the node are handled
      * Time to transform the collected data
      * @see AbstraceNodeElementVisitor::visitNode()
+     * @param Node $node
      */
     public function visitNode(Node &$node)
     {
-        $element = $this->dynamicAnalysis;
-        $path = $this->getWorkspacePath($node->getFullPath());
+        $element = $this->dynamic_analysis;
+        $path    = $this->getWorkspacePath($node->getFullPath());
         if ($path !== false) {
             fprintf($this->stream, "%d %s\n", $element->getPctDead(), $path);
         }
-
     }
 
     private function getWorkspacePath($path)
@@ -67,6 +71,10 @@ class EclipseColorVisitor extends AbstractNodeElementVisitor
         }
 
         return $result;
+    }
 
+    public function visitFunctionName(FileFunction $file_function)
+    {
+        // TODO: Implement visitFunctionName() method.
     }
 }
