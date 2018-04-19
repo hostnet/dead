@@ -62,6 +62,29 @@ class PrimeTask extends AbstractPDOTask
         return $visitor->getPrimeData();
     }
 
+    /**
+     * @param array $compare_from
+     * @param array $compare_against
+     * @return array
+     */
+    private function getFileFunctionDifference(array $compare_from, array $compare_against)
+    {
+        $result = [];
+        foreach ($compare_from as $key => $value) {
+            $file_function_diff = [];
+            foreach ($value->getFileFunctions() as $file_function) {
+                $is_in_compare_against = in_array($file_function, $compare_against[$key]->getFileFunctions());
+                if (!$is_in_compare_against) {
+                    $file_function_diff[] = $file_function;
+                }
+            }
+            $value->setFileFunctions($file_function_diff);
+            $result[$key] = $value;
+        }
+
+        return $result;
+    }
+
     private function &addVersioning(&$list, INodeElementVisitor $visitor)
     {
         foreach (array_keys($list) as $key) {
@@ -83,62 +106,69 @@ class PrimeTask extends AbstractPDOTask
 
     public function run()
     {
+        $local_nodes    = null;
+        $database_nodes = null;
+
         if ($this->vcs == self::SVN) {
             /*
              * SVN
              */
-            $file = (new FileTreeFactory())->scan($this->path)->produceList();
-            echo "read all files from disk into list\n";
+            $local_nodes = (new FileTreeFactory())->scan($this->path)->produceList();
+            echo "read all local_nodes from disk into list\n";
             $visitor = new SubversionVisitor($this->path);
-            $this->addVersioning($file, $visitor);
-            echo "added versioning info from svn to disk file list\n";
+            $this->addVersioning($local_nodes, $visitor);
+            echo "added versioning info from svn to disk local_nodes list\n";
         } elseif ($this->vcs == self::GIT) {
             /*
              * GIT
              */
-            $file = (new GitFileTreeFactory())->scan($this->path)->produceList();
-            echo "read all files from disk into list\n";
+            $local_nodes = (new GitFileTreeFactory())->scan($this->path)->produceList();
+            echo "read all local_nodes from disk into list\n";
             $visitor = new GitVisitor($this->path);
-            $this->addVersioning($file, $visitor);
-            echo "added versioning info from git to disk file list\n";
+            $this->addVersioning($local_nodes, $visitor);
+            echo "added versioning info from git to disk local_nodes list\n";
         } elseif ($this->vcs == self::NONE) {
             /*
              * NONE
              */
-            $file = (new FileTreeFactory())->scan($this->path)->produceList();
-            echo "read all files from disk into list\n";
+            $local_nodes = (new FileTreeFactory())->scan($this->path)->produceList();
+            echo "read all local_nodes from disk into list\n";
             echo "No versioning info added (no vcs specified)\n";
         }
 
-        $file = $this->getPrimeData($file, $this->prefix);
+        $prime_local_nodes = $this->getPrimeData($local_nodes, $this->prefix);
         echo "parsed all disk data into prime data\n";
 
-        $db = $this->getDbNodes();
+        $database_nodes = $this->getDbNodes();
         echo "read all entries from database into list\n";
-        $db = $this->getPrimeData($db);
+        $prime_database_nodes = $this->getPrimeData($database_nodes);
         echo "parsed all database data into prime data\n";
 
-        // Find new and deleted files
-        $new     = array_diff_key($file, $db);
-        $removed = array_diff_key($db, $file);
+        // Find new and deleted local_nodes
+        $new_local_nodes     = array_diff_key($prime_local_nodes, $prime_database_nodes);
+        $deleted_local_nodes = array_diff_key($prime_database_nodes, $prime_local_nodes);
 
-        // Remove them from the original sets
-        $db   = array_intersect_key($db, $file);
-        $file = array_intersect_key($file, $db);
+        // Remove the new and deleted nodes from the original sets
+        $cleaned_database_nodes = array_intersect_key($prime_database_nodes, $prime_local_nodes);
+        $cleaned_local_nodes    = array_intersect_key($prime_local_nodes, $prime_database_nodes);
 
-        // Search for differences form local files
-        // data comapred to the database
-        $diff = array_diff_assoc($file, $db);
+        // Search for differences from local_nodes
+        // data compared to the database
+        $diff = array_diff_assoc($cleaned_local_nodes, $cleaned_database_nodes);
 
+        $new_file_functions     = $this->getFileFunctionDifference($cleaned_local_nodes, $cleaned_database_nodes);
+        $deleted_file_functions = $this->getFileFunctionDifference($cleaned_database_nodes, $cleaned_local_nodes);
+
+        $this->insertNewFileFunctions($new_file_functions);
         // Commit all data to the database
         $this->getDb()->beginTransaction();
-        $this->insertNew($new);
-        $this->updateDead($removed);
-        $this->updateChanged($diff, $db);
+        $this->insertNewFiles($new_local_nodes);
+        $this->updateDeadFiles($deleted_local_nodes);
+        $this->updateChangedFiles($diff, $cleaned_database_nodes);
         $this->getDb()->commit();
     }
 
-    private function updateChanged(array $diff, array $db)
+    private function updateChangedFiles(array $diff, array $db)
     {
         if (count($diff) > 0) {
             $table = $this->getTable();
@@ -156,7 +186,7 @@ class PrimeTask extends AbstractPDOTask
         }
     }
 
-    private function insertNew(array $new)
+    private function insertNewFiles(array $new)
     {
         $table     = $this->getTable();
         $db        = $this->getDb();
@@ -177,10 +207,9 @@ class PrimeTask extends AbstractPDOTask
                 "INSERT INTO $table (file,added_at,changed_at) VALUES\n$values";
             $db->exec($query);
         }
-
     }
 
-    private function updateDead($removed)
+    private function updateDeadFiles($removed)
     {
         if (count($removed)) {
             $table  = $this->getTable();
@@ -191,4 +220,28 @@ class PrimeTask extends AbstractPDOTask
         }
     }
 
+
+    /**
+     * Constructs the SQL query and executes it.
+     * @param array $new
+     */
+    private function insertNewFileFunctions(array $new)
+    {
+        // early return when there is nothing to be added
+        if (empty($new)) {
+            return;
+        }
+        $table  = $this->getFunctionsTable();
+        $db     = $this->getDb();
+        $values = [];
+
+        foreach ($new as $data) {
+            foreach ($data->getFileFunctions() as $file_function) {
+                $values[] = "(\"$file_function\", NOW())";
+            }
+        }
+        $values_string = join(", ", $values);
+        $query         = $db->prepare("INSERT INTO $table (function, added_at) VALUES $values_string");
+        $db->exec($query->queryString);
+    }
 }

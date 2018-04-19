@@ -6,6 +6,7 @@ interface INodeElementVisitor {
 	public function visitVersioning(Versioning &$versioning);
 	public function visitAst(Ast &$ast);
 	public function visitNodeFirst(Node &$node);
+    public function visitFunctionName(FileFunction $file_function);
 }
  
 ?>

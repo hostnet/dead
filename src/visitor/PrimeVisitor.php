@@ -13,7 +13,8 @@ class PrimeVisitor extends AbstractNodeElementVisitor {
 	 * @var Versioning
 	 */
 	private $versioning = null;
-	
+	private $functions = [];
+
 	/**
 	 *
 	 * @var array[string]PrimeData
@@ -33,11 +34,17 @@ class PrimeVisitor extends AbstractNodeElementVisitor {
 	public function visitFileChange(FileChange &$fileChange) {
 		$this->fileChange = $fileChange;
 	}
-	
+
+	public function visitFunctionName(FileFunction $file_function)
+	{
+		$this->functions[] = $file_function->getFunction();
+	}
+
 	public function visitNode(Node &$node) {
 		$changedAt = "";
 		$dead = false;
-		
+		$file_functions = [];
+
 		if ($this->versioning !== null) {
 			$lastChange = $this->versioning->getLastChange();
 			if($lastChange !== null) {
@@ -53,11 +60,17 @@ class PrimeVisitor extends AbstractNodeElementVisitor {
 		if ($this->filechange !== null) {
 			$dead = is_null ( $this->filechange->getDeletedAt () );
 		}
-		
+
+		foreach ($this->functions as $function) {
+			$file_functions[] = $function;
+		}
+
+		$prime_data = new PrimeData ( $changedAt, $dead, $file_functions);
+
 		if($this->prefix) {
-		    $this->data [$this->prefix . $node->getPath ()] = new PrimeData ( $changedAt, $dead );
+			$this->data [$this->prefix . $node->getPath ()] = $prime_data;
 		} else {
-		  $this->data [$node->getFullPath ()] = new PrimeData ( $changedAt, $dead );
+			$this->data [$node->getFullPath ()] = $prime_data;
 		}
 	}
 	
@@ -92,7 +105,28 @@ class PrimeData {
 	 * @var boolean
 	 */
 	private $dead;
-	
+
+    /**
+     * @var array
+     */
+    private $file_functions;
+
+    /**
+     * @param array $file_functions
+     */
+    public function setFileFunctions(array $file_functions): void
+    {
+        $this->file_functions = $file_functions;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFileFunctions(): array
+    {
+        return $this->file_functions;
+    }
+
 	/**
 	 *
 	 * @return string
@@ -116,19 +150,23 @@ class PrimeData {
 	public function getDead() {
 		return $this->dead;
 	}
-	
+
 	/**
 	 *
-	 * @param $fullPath string       	
-	 * @param $changedAt string       	
-	 * @param $dead boolean       	
+	 * @param int $changedAt string
+	 * @param $dead boolean
+	 * @param array $file_functions
 	 */
-	public function __construct($changedAt = 0, $dead = false) {
+	public function __construct($changedAt = 0, $dead = false, $file_functions = [])
+	{
 		assert ( is_string ( $changedAt ) );
 		assert ( is_bool ( $dead ) );
-		
+		assert(is_array($file_functions));
+
 		$this->changedAt = $changedAt;
 		$this->dead = $dead;
+		$this->file_functions = $file_functions;
+
 	}
 	
 	public function __toString() {

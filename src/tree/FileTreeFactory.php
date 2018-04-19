@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright 2018 Hostnet B.V.
+ */
+declare(strict_types = 1);
 
 class FileTreeFactory extends AbstractTreeFactory
 {
@@ -30,12 +34,20 @@ class FileTreeFactory extends AbstractTreeFactory
     }
 
     /**
-     *
-     * @param $filename string            
+     * When a file is added scan it for functions and add them to the file.
+     * @param $filename string
+     * @return FileTreeFactory
      */
-    public function addFile($filename)
+    public function addFile($filename): self
     {
-        $this->files[] = new Node($filename);
+        $node                   = new Node($filename);
+        $function_paths_factory = new FunctionPathsFactory();
+
+        foreach ($function_paths_factory->produceList($node) as $function) {
+            $node->addElement($function);
+        }
+
+        $this->files[] = $node;
         return $this;
     }
 
