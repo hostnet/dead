@@ -84,6 +84,11 @@ abstract class AbstractPDOTask implements ITask
     return $this->table;
   }
 
+    public function getFunctionsTable()
+    {
+      return $this->table . "_functions";
+    }
+
   /**
    *
    * @param mixed $field
