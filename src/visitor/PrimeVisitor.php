@@ -13,6 +13,10 @@ class PrimeVisitor extends AbstractNodeElementVisitor {
 	 * @var Versioning
 	 */
 	private $versioning = null;
+
+    /**
+     * @var FileFunction[]
+     */
 	private $functions = [];
 
 	/**
@@ -107,12 +111,12 @@ class PrimeData {
 	private $dead;
 
     /**
-     * @var array
+     * @var FileFunction[]
      */
     private $file_functions;
 
     /**
-     * @param array $file_functions
+     * @param FileFunction[]
      */
     public function setFileFunctions(array $file_functions): void
     {
@@ -120,7 +124,7 @@ class PrimeData {
     }
 
     /**
-     * @return array
+     * @return FileFunction[]
      */
     public function getFileFunctions(): array
     {
@@ -155,7 +159,7 @@ class PrimeData {
 	 *
 	 * @param int $changedAt string
 	 * @param $dead boolean
-	 * @param array $file_functions
+	 * @param FileFunction[] $file_functions
 	 */
 	public function __construct($changedAt = 0, $dead = false, $file_functions = [])
 	{

@@ -10,9 +10,9 @@ class FileTreeFactory extends AbstractTreeFactory
     
     /**
      *
-     * @param $path string            
-     * @param $extension string            
-     * @return void
+     * @param $path string
+     * @param $extension string
+     * @return self
      */
     public function scan($path, $extension = 'php')
     {

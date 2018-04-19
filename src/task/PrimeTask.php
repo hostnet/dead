@@ -63,11 +63,11 @@ class PrimeTask extends AbstractPDOTask
     }
 
     /**
-     * @param array $compare_from
-     * @param array $compare_against
-     * @return array
+     * @param Node[] $compare_from
+     * @param Node[] $compare_against
+     * @return Node[]
      */
-    private function getFileFunctionDifference(array $compare_from, array $compare_against)
+    private function getFileFunctionDifference(array $compare_from, array $compare_against): array
     {
         $result = [];
         foreach ($compare_from as $key => $value) {
@@ -223,7 +223,7 @@ class PrimeTask extends AbstractPDOTask
 
     /**
      * Constructs the SQL query and executes it.
-     * @param array $new
+     * @param Node[] $new
      */
     private function insertNewFileFunctions(array $new)
     {
