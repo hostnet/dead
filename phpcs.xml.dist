@@ -19,10 +19,7 @@
         <exclude-pattern>src/loader.php</exclude-pattern>
     </rule>
 
-    <exclude-pattern>src/common/</exclude-pattern>
-    <exclude-pattern>src/task/</exclude-pattern>
-    <exclude-pattern>src/tree/(?!(PHPTokensFactory.php))</exclude-pattern>
-    <exclude-pattern>src/visitor/</exclude-pattern>
+    <exclude-pattern>src/common/yml/</exclude-pattern>
 
     <rule ref="Hostnet"/>
 </ruleset>
