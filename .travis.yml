@@ -16,4 +16,6 @@ php:
 install:
  - composer update $COMPOSER_FLAGS --prefer-dist
 
-script: vendor/bin/phpunit
+script:
+ - vendor/bin/phpunit
+ - vendor/bin/phpcs -n
