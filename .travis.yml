@@ -7,22 +7,13 @@ cache:
     - "$HOME/.composer/cache"
 
 env:
-  - COMPOSER_FLAGS="--prefer-stable"
+  - COMPOSER_FLAGS="--prefer-stable --prefer-lowest"
 
 php:
   - 7.1
+  - 7.2
 
-matrix:
-  include:
-    - php: 7.1
-    - script: vendor/bin/phpcs -n
-      env: PHPCS_BUILD=1
-    - php: 7.1
-  allow_failures:
-    - php: 7.1
-
-before_install: if [[ "$SYMFONY_VERSION" != "" ]]; then composer require --no-update symfony/symfony:${SYMFONY_VERSION}; fi
-
-install: composer update $COMPOSER_FLAGS --prefer-dist
+install:
+ - composer update $COMPOSER_FLAGS --prefer-dist
 
 script: vendor/bin/phpunit

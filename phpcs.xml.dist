@@ -19,6 +19,7 @@
         <exclude-pattern>src/loader.php</exclude-pattern>
     </rule>
 
+    <!--Excluded because it is very old code by a third party-->
     <exclude-pattern>src/common/yml/</exclude-pattern>
 
     <rule ref="Hostnet"/>
