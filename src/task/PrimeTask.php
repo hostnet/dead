@@ -57,6 +57,7 @@ class PrimeTask extends AbstractPdoTaskInterface
 
         foreach (array_keys($list) as $key) {
             $list[$key]->accept($visitor);
+            $visitor->resetFunctions();
         }
 
         return $visitor->getPrimeData();
