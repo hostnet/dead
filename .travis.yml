@@ -16,10 +16,12 @@ matrix:
       env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 7.2
       env: COMPOSER_FLAGS="--prefer-lowest"
+    - script: vendor/bin/phpcs -n
+      php: 7.2
+      env: PHPCS_BUILD=1
 
 install:
  - composer update $COMPOSER_FLAGS --prefer-dist
 
 script:
  - vendor/bin/phpunit
- - vendor/bin/phpcs -n
