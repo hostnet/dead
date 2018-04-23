@@ -1,24 +1,30 @@
 <?php
+/**
+ * @copyright 2012-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
-class Node implements INodeElement
+class Node implements NodeElementInterface
 {
     private $children = array();
     private $elements = array();
     private $path;
-    private $fullPath;
+    private $full_path;
     private $location;
     private $parent = null;
 
-    public function __construct($fullPath, $name = NULL)
+    public function __construct($full_path, $name = null)
     {
-        $this->fullPath = $fullPath;
-        $this->location = realpath($fullPath) ? : $fullPath;
+        $this->full_path = $full_path;
+        $this->location  = realpath($full_path) ?: $full_path;
 
-        if (strlen($fullPath) <= 1) {
-            $this->path = $fullPath;
-        } elseif ($name == NULL) {
-            $this->path = substr($fullPath,
-                    strrpos($fullPath, DIRECTORY_SEPARATOR) + 1);
+        if (strlen($full_path) <= 1) {
+            $this->path = $full_path;
+        } elseif ($name == null) {
+            $this->path = substr(
+                $full_path,
+                strrpos($full_path, DIRECTORY_SEPARATOR) + 1
+            );
         } else {
             $this->path = $name;
         }
@@ -39,7 +45,7 @@ class Node implements INodeElement
         $this->children[] = &$node;
     }
 
-    public function addElement(INodeElement $element)
+    public function addElement(NodeElementInterface $element)
     {
         $this->elements[] = $element;
     }
@@ -59,7 +65,7 @@ class Node implements INodeElement
 
     public function getFullPath()
     {
-        return $this->fullPath;
+        return $this->full_path;
     }
 
     protected function &getChildren()
@@ -68,7 +74,7 @@ class Node implements INodeElement
     }
 
     /**
-     * 
+     *
      * @param string $path
      * @return Node
      */
@@ -80,9 +86,9 @@ class Node implements INodeElement
         if (array_key_exists($path, $this->children)) {
             $node = $this->children[$path];
         } else {
-            $ownPath = $this->fullPath != DIRECTORY_SEPARATOR ? $this->fullPath
-                    : "";
-            $node = new Node($ownPath . DIRECTORY_SEPARATOR . $path, $path);
+            $own_path              = $this->full_path != DIRECTORY_SEPARATOR ? $this->full_path
+                : "";
+            $node                  = new Node($own_path.DIRECTORY_SEPARATOR.$path, $path);
             $this->children[$path] = $node;
             $node->setParent($this);
         }
@@ -93,9 +99,9 @@ class Node implements INodeElement
     /**
      * Recursion for tree pushed down to visitor so
      * it can deside the traversing algorithm
-     * @see INodeElement::accept()
+     * @see NodeElementInterface::accept()
      */
-    public function accept(INodeElementVisitor $visitor)
+    public function accept(NodeElementVisitorInterface $visitor)
     {
         $visitor->visitNodeFirst($this);
         foreach ($this->elements as $element) {
@@ -112,6 +118,7 @@ class Node implements INodeElement
     public function toStringSinge()
     {
         $elements = implode(",", $this->elements);
+
         return "<Node path=\"$this->path\" elements=$elements>";
     }
 
@@ -120,9 +127,10 @@ class Node implements INodeElement
         $string = $this->toStringSinge();
         foreach ($this->children as $child) {
             /* @var $child Node */
-            $string .= PHP_EOL . $indent
-                    . $child->toStringRecursive($indent . "  ");
+            $string .= PHP_EOL.$indent
+                .$child->toStringRecursive($indent."  ");
         }
+
         return $string;
     }
 
@@ -161,11 +169,12 @@ class Node implements INodeElement
         if ($this->parent == null) {
             throw new Exception("root node has no parent");
         }
+
         return $this->parent;
     }
 
     /**
-     * 
+     *
      * @param Node $parent
      */
     public function setParent(Node &$parent)
@@ -175,13 +184,14 @@ class Node implements INodeElement
 
     /**
      * @return void
+     * @throws Exception
      */
     public function aggregateTree()
     {
         $this->aggregateElements();
         foreach ($this->elements as $element) {
             if ($this->parent instanceof Node) {
-                if ($element instanceof IAggregatable) {
+                if ($element instanceof AggregatableInterface) {
                     $this->getParent()->addElement($element);
                 }
             }
@@ -193,25 +203,25 @@ class Node implements INodeElement
      */
     public function aggregateElements()
     {
-        $sortedElements = array();
+        $sorted_elements = array();
 
         foreach ($this->elements as $key => $element) {
-            if ($element instanceof IAggregatable) {
+            if ($element instanceof AggregatableInterface) {
                 $index = $element->getAggregateKey();
 
-                if (isset($sortedElements[$index])) {
-                    $sortedElements[$index] = $sortedElements[$index]
-                            ->aggregate($element);
+                if (isset($sorted_elements[$index])) {
+                    $sorted_elements[$index] = $sorted_elements[$index]
+                        ->aggregate($element);
                 } else {
-                    $sortedElements[$index] = $element;
+                    $sorted_elements[$index] = $element;
                 }
-                
+
                 unset($this->elements[$key]);
             }
         }
-        
-        foreach($sortedElements as $element) {
-          $this->elements[] = $element;
+
+        foreach ($sorted_elements as $element) {
+            $this->elements[] = $element;
         }
     }
 }

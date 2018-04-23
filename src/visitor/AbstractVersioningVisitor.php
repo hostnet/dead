@@ -1,9 +1,13 @@
 <?php
+/**
+ * @copyright 2012-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
-abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitor
+abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitorInterface
 {
 
-	  const max_commits = 1;
+    const MAX_COMMITS = 1;
 
     /**
      *
@@ -15,11 +19,10 @@ abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitor
     public function visitNode(Node &$node)
     {
         $commits = $this
-                ->getCommits($node->getLocation());
+            ->getCommits($node->getLocation());
         if (count($commits)) {
-            $versioning = new Versioning($commits, self::max_commits);
+            $versioning = new Versioning($commits, self::MAX_COMMITS);
             $node->addElement($versioning);
         }
-
     }
 }

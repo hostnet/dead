@@ -2,12 +2,12 @@
 /**
  * @copyright 2018 Hostnet B.V.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
-class FileTreeFactory extends AbstractTreeFactory
+class FileTreeFactory extends AbstractTreeFactoryInterface
 {
     private $files = array();
-    
+
     /**
      *
      * @param $path string
@@ -19,17 +19,18 @@ class FileTreeFactory extends AbstractTreeFactory
         try {
             $directory_iterator = new RecursiveDirectoryIterator($path);
             $recursive_iterator = new RecursiveIteratorIterator($directory_iterator);
-            $filter_iterator = new FileInfoFilterIterator($recursive_iterator);
+            $filter_iterator    = new FileInfoFilterIterator($recursive_iterator);
             $filter_iterator->setFindExtension($extension);
             $path_length = strlen($path);
             foreach ($filter_iterator as $file) {
-                    $this->addFile($file->getPathname());
+                $this->addFile($file->getPathname());
             }
         } catch (UnexpectedValueException $e) {
-            echo "Could not open dir $path" . PHP_EOL;
+            echo "Could not open dir $path".PHP_EOL;
         } catch (Exception $e) {
             die($e->getMessage());
         }
+
         return $this;
     }
 
@@ -48,6 +49,7 @@ class FileTreeFactory extends AbstractTreeFactory
         }
 
         $this->files[] = $node;
+
         return $this;
     }
 
