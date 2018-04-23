@@ -98,7 +98,7 @@ class PrimeTask extends AbstractPdoTaskInterface
     {
         // Read all files from the databse
         $factory = new PdoTreeFactory($this->getDb());
-        $factory->query(PdoTreeFactory::ALL);
+        $factory->query(PdoTreeFactory::ALL_FILES);
         $list = $factory->produceList();
 
         return $list;

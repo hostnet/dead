@@ -11,9 +11,15 @@ declare(strict_types=1);
 class PdoTreeFactory extends AbstractTreeFactoryInterface
 {
 
-    const ALL           = true;
-    const ONLY_EXISTING = false;
+    const ALL_FILES                    = true;
+    const ONLY_EXISTING_FILES          = false;
+    const ALL_FILES_QUERY              = "SELECT * FROM %s";
+    const EXISTING_FILES_QUERY         = "SELECT * FROM %s WHERE deleted_at IS NULL";
+    const ALL_FUNCTIONS_QUERY          = "SELECT * FROM %s WHERE function_name IS LIKE \"%s%\"";
+    const ALL_EXISTING_FUNCTIONS_QUERY = "SELECT * FROM %s WHERE function_name IS LIKE \"%s%\" AND deleted_at is NULL";
 
+    private $table_files;
+    private $table_functions;
     /**
      * The database connection
      * @var PDO
@@ -22,17 +28,16 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
 
     /**
      *
-     * @var array[int]Node
+     * @var Node[]
      */
-    private $leaves = array();
-
-    private $query_all = "SELECT * FROM %s";
-    private $query     = "SELECT * FROM %s WHERE deleted_at IS NULL";
+    private $leaves;
 
     public function __construct(PDO $db)
     {
-        $this->table = $settings = Settings::instance()->getOption("table");
-        $this->db    = $db;
+        $this->table_files     = $settings = Settings::instance()->getOption("table");
+        $this->table_functions = $this->table_files."_functions";
+        $this->db              = $db;
+        $this->leaves          = [];
     }
 
     /**
@@ -44,25 +49,20 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
         return $this->leaves;
     }
 
-    public function setTable($table)
+    public function setTableFiles($table_files)
     {
-        $this->table = "`$table`";
+        $this->table_files = "`$table_files`";
     }
 
     /**
      *
-     * @param $path string
-     * @param $extension string
+     * @param bool $all
      * @return void
      */
-    public function query($all = self::ONLY_EXISTING)
+    public function query($all = self::ONLY_EXISTING_FILES)
     {
-        if ($all === self::ALL) {
-            $query = $this->query_all;
-        } else {
-            $query = $this->query;
-        }
-        $query     = sprintf($query, $this->table);
+        $query     = $all ? self::ALL_FILES_QUERY : self::EXISTING_FILES_QUERY;
+        $query     = sprintf($query, $this->table_files);
         $statement = $this->db->query($query);
         $statement->execute();
 
