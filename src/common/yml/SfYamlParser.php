@@ -22,7 +22,7 @@ if (!defined('PREG_BAD_UTF8_OFFSET_ERROR'))
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @version    SVN: $Id: sfYamlParser.class.php 10832 2008-08-13 07:46:08Z fabien $
  */
-class sfYamlParser
+class SfYamlParser
 {
   protected
     $offset        = 0,
@@ -89,7 +89,7 @@ class sfYamlParser
         if (!isset($values['value']) || '' == trim($values['value'], ' ') || 0 === strpos(ltrim($values['value'], ' '), '#'))
         {
           $c = $this->getRealCurrentLineNb() + 1;
-          $parser = new sfYamlParser($c);
+          $parser = new SfYamlParser($c);
           $parser->refs =& $this->refs;
           $data[] = $parser->parse($this->getNextEmbedBlock());
         }
@@ -97,11 +97,11 @@ class sfYamlParser
         {
           if (isset($values['leadspaces'])
             && ' ' == $values['leadspaces']
-            && preg_match('#^(?P<key>'.sfYamlInline::REGEX_QUOTED_STRING.'|[^ \'"\{].*?) *\:(\s+(?P<value>.+?))?\s*$#u', $values['value'], $matches))
+            && preg_match('#^(?P<key>'.SfYamlInline::REGEX_QUOTED_STRING.'|[^ \'"\{].*?) *\:(\s+(?P<value>.+?))?\s*$#u', $values['value'], $matches))
           {
             // this is a compact notation element, add to next block and parse
             $c = $this->getRealCurrentLineNb();
-            $parser = new sfYamlParser($c);
+            $parser = new SfYamlParser($c);
             $parser->refs =& $this->refs;
 
             $block = $values['value'];
@@ -118,9 +118,9 @@ class sfYamlParser
           }
         }
       }
-      else if (preg_match('#^(?P<key>'.sfYamlInline::REGEX_QUOTED_STRING.'|[^ \'"].*?) *\:(\s+(?P<value>.+?))?\s*$#u', $this->currentLine, $values))
+      else if (preg_match('#^(?P<key>'.SfYamlInline::REGEX_QUOTED_STRING.'|[^ \'"].*?) *\:(\s+(?P<value>.+?))?\s*$#u', $this->currentLine, $values))
       {
-        $key = sfYamlInline::parseScalar($values['key']);
+        $key = SfYamlInline::parseScalar($values['key']);
 
         if ('<<' === $key)
         {
@@ -143,7 +143,7 @@ class sfYamlParser
               $value = $this->getNextEmbedBlock();
             }
             $c = $this->getRealCurrentLineNb() + 1;
-            $parser = new sfYamlParser($c);
+            $parser = new SfYamlParser($c);
             $parser->refs =& $this->refs;
             $parsed = $parser->parse($value);
 
@@ -195,7 +195,7 @@ class sfYamlParser
           else
           {
             $c = $this->getRealCurrentLineNb() + 1;
-            $parser = new sfYamlParser($c);
+            $parser = new SfYamlParser($c);
             $parser->refs =& $this->refs;
             $data[$key] = $parser->parse($this->getNextEmbedBlock());
           }
@@ -217,7 +217,7 @@ class sfYamlParser
         // 1-liner followed by newline
         if (2 == count($this->lines) && empty($this->lines[1]))
         {
-          $value = sfYamlInline::load($this->lines[0]);
+          $value = SfYamlInline::load($this->lines[0]);
           if (is_array($value))
           {
             $first = reset($value);
@@ -421,7 +421,7 @@ class sfYamlParser
     }
     else
     {
-      return sfYamlInline::load($value);
+      return SfYamlInline::load($value);
     }
   }
 

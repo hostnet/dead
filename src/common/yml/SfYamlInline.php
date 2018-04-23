@@ -17,7 +17,7 @@
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @version    SVN: $Id: sfYamlInline.class.php 16177 2009-03-11 08:32:48Z fabien $
  */
-class sfYamlInline
+class SfYamlInline
 {
   const REGEX_QUOTED_STRING = '(?:"([^"\\\\]*(?:\\\\.[^"\\\\]*)*)"|\'([^\']*(?:\'\'[^\']*)*)\')';
 
@@ -72,7 +72,7 @@ class sfYamlInline
    */
   static public function dump($value)
   {
-    if ('1.1' === sfYaml::getSpecVersion())
+    if ('1.1' === SfYaml::getSpecVersion())
     {
       $trueValues = array('true', 'on', '+', 'yes', 'y');
       $falseValues = array('false', 'off', '-', 'no', 'n');
@@ -374,7 +374,7 @@ class sfYamlInline
   {
     $scalar = trim($scalar);
 
-    if ('1.1' === sfYaml::getSpecVersion())
+    if ('1.1' === SfYaml::getSpecVersion())
     {
       $trueValues = array('true', 'on', '+', 'yes', 'y');
       $falseValues = array('false', 'off', '-', 'no', 'n');
