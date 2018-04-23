@@ -19,11 +19,5 @@
     },
     "bin": [
         "bin/dead"
-    ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url":  "https://packagist.hostnetbv.nl"
-        }
     ]
 }

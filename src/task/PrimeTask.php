@@ -4,7 +4,7 @@
  */
 declare(strict_types=1);
 
-class PrimeTask extends AbstractPDOTask
+class PrimeTask extends AbstractPdoTaskInterface
 {
     // commandline or config
     private $path;
@@ -85,7 +85,7 @@ class PrimeTask extends AbstractPDOTask
         return $result;
     }
 
-    private function &addVersioning(&$list, INodeElementVisitor $visitor)
+    private function &addVersioning(&$list, NodeElementVisitorInterface $visitor)
     {
         foreach (array_keys($list) as $key) {
             $list[$key]->accept($visitor);
@@ -97,8 +97,8 @@ class PrimeTask extends AbstractPDOTask
     private function getDbNodes()
     {
         // Read all files from the databse
-        $factory = new PDOTreeFactory($this->getDb());
-        $factory->query(PDOTreeFactory::ALL);
+        $factory = new PdoTreeFactory($this->getDb());
+        $factory->query(PdoTreeFactory::ALL);
         $list = $factory->produceList();
 
         return $list;
@@ -174,11 +174,12 @@ class PrimeTask extends AbstractPDOTask
             $table = $this->getTable();
             $sql   = "";
             $query =
-                "UPDATE $table SET deleted_at = NULL, last_hit=last_hit, changed_at = %s /* was: %s */ WHERE file = \"%s\";\n";
+                "UPDATE $table SET deleted_at = NULL, last_hit=last_hit, changed_at = %s" .
+                "/* was: %s */ WHERE file = \"%s\";\n";
             foreach ($diff as $file => $data) {
                 $changed_at         = $data->getSQLChangedAt();
                 $current_changed_at = $db[$file]->getSQLChangedAt();
-                $sql                .= sprintf($query, $changed_at, $current_changed_at, $file);
+                $sql               .= sprintf($query, $changed_at, $current_changed_at, $file);
             }
 
             $sql;
@@ -199,7 +200,7 @@ class PrimeTask extends AbstractPDOTask
                  */
                 $safe_file  = $db->quote($file);
                 $changed_at = $data->getSQLChangedAt();
-                $values     .= "($safe_file,NOW(),$changed_at),\n";
+                $values    .= "($safe_file,NOW(),$changed_at),\n";
             }
             $values = substr($values, 0, -2);
 

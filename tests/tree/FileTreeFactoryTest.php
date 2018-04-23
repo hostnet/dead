@@ -11,6 +11,7 @@ class FileTreeFactoryTest extends TestCase
 
     public function testScan()
     {
+        $this->markTestSkipped();
         $factory = new FileTreeFactory();
         $factory->scan('.');
     }

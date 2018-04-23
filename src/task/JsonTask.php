@@ -1,6 +1,10 @@
 <?php
+/**
+ * @copyright 2012-2018 Hostnet B.V.
+ */
+declare(strict_types=1);
 
-class JsonTask extends AbstractPDOTask
+class JsonTask extends AbstractPdoTaskInterface
 {
     private $path;
 
@@ -8,18 +12,19 @@ class JsonTask extends AbstractPDOTask
     {
         parent::__construct();
         if ($path === null) {
-            $settings = Settings::instance();
+            $settings   = Settings::instance();
             $this->path = $settings->getCommand()->getArgument("path");
         } else {
             $this->path = $path;
         }
     }
+
     /**
-     * @see ITask::run()
+     * @see TaskInterface::run()
      */
     public function run()
     {
-        $factory = new PDOTreeMapFactory($this->getDb());
+        $factory = new PdoTreeMapFactory($this->getDb());
         $factory->query($this->path);
         $list = $factory->produceList();
 
@@ -29,7 +34,5 @@ class JsonTask extends AbstractPDOTask
         }
 
         echo $visitor->produceJson($this->path);
-
     }
-
 }
