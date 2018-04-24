@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class TreeTask extends AbstractPdoTaskInterface
 {
-
     private $table;
     private $query =
         <<<EOQ
@@ -33,7 +32,7 @@ EOQ;
         //Source table name and append _tree
         $table = $settings->getCommand()->getOption("table");
         if ($table == "") {
-            $table = $this->getTable()."_tree";
+            $table = $this->getTable() . "_tree";
         }
         $this->table = $table;
     }
@@ -57,7 +56,6 @@ EOQ;
     }
 
     /**
-     *
      * @param array $data
      * @return string
      */
@@ -74,19 +72,17 @@ EOQ;
     }
 
     /**
-     *
      * @param array $data
      * @return string
      */
 
     private function dataToValues(array $data)
     {
-
         foreach ($data as &$row) {
             foreach ($row as &$field) {
                 $field = $this->transformAndEscapeField($field);
             }
-            $row = "(".implode(",", $row).")";
+            $row = "(" . implode(",", $row) . ")";
         }
         $data = implode(",\n", $data);
 

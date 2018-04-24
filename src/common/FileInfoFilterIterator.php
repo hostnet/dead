@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class FileInfoFilterIterator extends FilterIterator
 {
-
     private $find_extensions;
 
     public function setFindExtension($extension)
@@ -19,8 +18,8 @@ class FileInfoFilterIterator extends FilterIterator
         $info = new SplFileInfo($this->current()->getPathname());
         if (in_array($info->getExtension(), $this->find_extensions)) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 }

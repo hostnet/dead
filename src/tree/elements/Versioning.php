@@ -6,14 +6,11 @@ declare(strict_types=1);
 
 class Versioning implements NodeElementInterface, AggregatableInterface
 {
-
     /**
-     *
      * @var array[int]commit
      */
-    private $commits = array();
+    private $commits = [];
     /**
-     *
      * @var int
      */
     private $max_commits;

@@ -24,7 +24,7 @@ class AstVisitor extends AbstractNodeElementVisitorInterface
 
     private function execVersion()
     {
-        $version = `$this->phcCommand    --version`;
+        $version = shell_exec("$this->phcCommand --version");
         $return  = "";
 
         if (substr($version, 0, 3) == "phc") {
@@ -36,7 +36,7 @@ class AstVisitor extends AbstractNodeElementVisitorInterface
 
     private function execPhc($filename)
     {
-        return `$this->phc_command  $this->phc_ast_option  $filename  2>&1`;
+        return shell_exec("$this->phc_command  $this->phc_ast_option  $filename  2>&1");
     }
 
     public function visitNode(Node &$node)

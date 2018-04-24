@@ -50,9 +50,11 @@ class EclipseColorVisitor extends AbstractNodeElementVisitorInterface
     {
         $element = $this->dynamic_analysis;
         $path    = $this->getWorkspacePath($node->getFullPath());
-        if ($path !== false) {
-            fprintf($this->stream, "%d %s\n", $element->getPctDead(), $path);
+        if ($path === false) {
+            return;
         }
+
+        fprintf($this->stream, "%d %s\n", $element->getPctDead(), $path);
     }
 
     private function getWorkspacePath($path)

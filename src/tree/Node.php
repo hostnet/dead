@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 class Node implements NodeElementInterface
 {
-    private $children = array();
-    private $elements = array();
+    private $children = [];
+    private $elements = [];
     private $path;
     private $full_path;
     private $location;
@@ -32,7 +32,7 @@ class Node implements NodeElementInterface
 
     /**
      * Returns true is this is a leave node
-     * @return boolean
+     * @return bool
      */
     public function isLeaf()
     {
@@ -74,7 +74,6 @@ class Node implements NodeElementInterface
     }
 
     /**
-     *
      * @param string $path
      * @return Node
      */
@@ -88,7 +87,7 @@ class Node implements NodeElementInterface
         } else {
             $own_path              = $this->full_path != DIRECTORY_SEPARATOR ? $this->full_path
                 : "";
-            $node                  = new Node($own_path.DIRECTORY_SEPARATOR.$path, $path);
+            $node                  = new Node($own_path . DIRECTORY_SEPARATOR . $path, $path);
             $this->children[$path] = $node;
             $node->setParent($this);
         }
@@ -127,8 +126,8 @@ class Node implements NodeElementInterface
         $string = $this->toStringSinge();
         foreach ($this->children as $child) {
             /* @var $child Node */
-            $string .= PHP_EOL.$indent
-                .$child->toStringRecursive($indent."  ");
+            $string .= PHP_EOL . $indent
+                . $child->toStringRecursive($indent . "  ");
         }
 
         return $string;
@@ -153,7 +152,7 @@ class Node implements NodeElementInterface
     /**
      * Returns true if this is a node without a parent
      * A node without parent is a root node.
-     * @return boolean
+     * @return bool
      */
     public function isRoot()
     {
@@ -174,7 +173,6 @@ class Node implements NodeElementInterface
     }
 
     /**
-     *
      * @param Node $parent
      */
     public function setParent(Node &$parent)
@@ -190,11 +188,15 @@ class Node implements NodeElementInterface
     {
         $this->aggregateElements();
         foreach ($this->elements as $element) {
-            if ($this->parent instanceof Node) {
-                if ($element instanceof AggregatableInterface) {
-                    $this->getParent()->addElement($element);
-                }
+            if (!($this->parent instanceof Node)) {
+                continue;
             }
+
+            if (!($element instanceof AggregatableInterface)) {
+                continue;
+            }
+
+            $this->getParent()->addElement($element);
         }
     }
 
@@ -203,21 +205,23 @@ class Node implements NodeElementInterface
      */
     public function aggregateElements()
     {
-        $sorted_elements = array();
+        $sorted_elements = [];
 
         foreach ($this->elements as $key => $element) {
-            if ($element instanceof AggregatableInterface) {
-                $index = $element->getAggregateKey();
-
-                if (isset($sorted_elements[$index])) {
-                    $sorted_elements[$index] = $sorted_elements[$index]
-                        ->aggregate($element);
-                } else {
-                    $sorted_elements[$index] = $element;
-                }
-
-                unset($this->elements[$key]);
+            if (!($element instanceof AggregatableInterface)) {
+                continue;
             }
+
+            $index = $element->getAggregateKey();
+
+            if (isset($sorted_elements[$index])) {
+                $sorted_elements[$index] = $sorted_elements[$index]
+                    ->aggregate($element);
+            } else {
+                $sorted_elements[$index] = $element;
+            }
+
+            unset($this->elements[$key]);
         }
 
         foreach ($sorted_elements as $element) {

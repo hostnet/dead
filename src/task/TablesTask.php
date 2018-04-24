@@ -11,9 +11,11 @@ class TablesTask extends AbstractPdoTaskInterface
         $sql = 'SHOW TABLES';
         foreach ($this->getDb()->query($sql) as $table) {
             $table = $table[0];
-            if (substr($table, -5) !== '_tree') {
-                echo "$table\n";
+            if (substr($table, -5) === '_tree') {
+                continue;
             }
+
+            echo "$table\n";
         }
     }
 }

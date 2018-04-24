@@ -6,15 +6,12 @@ declare(strict_types=1);
 
 class PrimeVisitor extends AbstractNodeElementVisitorInterface
 {
-
     /**
-     *
      * @var FileChange
      */
     private $file_change = null;
 
     /**
-     *
      * @var Versioning
      */
     private $versioning = null;
@@ -25,13 +22,11 @@ class PrimeVisitor extends AbstractNodeElementVisitorInterface
     private $functions = [];
 
     /**
-     *
      * @var array[string]PrimeData
      */
-    private $data = array();
+    private $data = [];
 
     /**
-     *
      * @var string
      */
     private $prefix = null;
@@ -79,14 +74,13 @@ class PrimeVisitor extends AbstractNodeElementVisitorInterface
         $prime_data = new PrimeData($changed_at, $dead, $file_functions);
 
         if ($this->prefix) {
-            $this->data [$this->prefix.$node->getPath()] = $prime_data;
+            $this->data[$this->prefix . $node->getPath()] = $prime_data;
         } else {
-            $this->data [$node->getFullPath()] = $prime_data;
+            $this->data[$node->getFullPath()] = $prime_data;
         }
     }
 
     /**
-     *
      * @return array[int]PrimeData
      */
     public function getPrimeData()
@@ -96,7 +90,7 @@ class PrimeVisitor extends AbstractNodeElementVisitorInterface
 
     public function reset()
     {
-        $this->data = array();
+        $this->data = [];
     }
 
     public function resetFunctions()

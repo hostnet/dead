@@ -19,8 +19,15 @@
         <exclude-pattern>src/loader.php</exclude-pattern>
     </rule>
 
+    <!--Legacy code I don't want to mess with-->
+    <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod">
+        <exclude-pattern>src/visitor/SubversionVisitor.php</exclude-pattern>
+    </rule>
+
     <!--Excluded because it is very old code by a third party-->
     <exclude-pattern>src/common/yml/</exclude-pattern>
+    <!--These files are only used in unit tests-->
+    <exclude-pattern>tests/fixtures</exclude-pattern>
 
     <rule ref="Hostnet"/>
 </ruleset>

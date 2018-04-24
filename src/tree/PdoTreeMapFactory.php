@@ -1,16 +1,12 @@
 <?php
 /**
- * @author Hidde Boomsma <hidde@hostnet.nl>
- * @subpackage tree
  * @copyright 2018 Hostnet B.V.
- * @since 2012.01.31 14:03
  * @link http://www.php.net/manual/en/book.pdo.php
  */
 declare(strict_types=1);
 
 class PdoTreeMapFactory extends AbstractTreeFactoryInterface
 {
-
     /**
      * The database connection
      * @var PDO
@@ -18,10 +14,9 @@ class PdoTreeMapFactory extends AbstractTreeFactoryInterface
     private $db;
 
     /**
-     *
      * @var array[int]Node
      */
-    private $leaves = array();
+    private $leaves = [];
 
     private $query = "SELECT * FROM %s WHERE file REGEXP %s";
 
@@ -46,7 +41,6 @@ class PdoTreeMapFactory extends AbstractTreeFactoryInterface
     }
 
     /**
-     *
      * @param $path string
      * @param $extension string
      * @return void
@@ -65,7 +59,6 @@ class PdoTreeMapFactory extends AbstractTreeFactoryInterface
     }
 
     /**
-     *
      * @param array $row
      * @return Node
      */
@@ -83,7 +76,7 @@ class PdoTreeMapFactory extends AbstractTreeFactoryInterface
 
         $node = new Node($row['file']);
 
-        $version = new Versioning(array(new Commit("", "", $changed_at, "")), 1);
+        $version = new Versioning([new Commit("", "", $changed_at, "")], 1);
         $node->addElement($version);
 
         $analysis = new DynamicAnalysis($count, $first_hit, $last_hit, $file_count, $dead_count);

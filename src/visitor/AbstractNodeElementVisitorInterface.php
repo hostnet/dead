@@ -4,7 +4,6 @@
  */
 declare(strict_types=1);
 
-
 abstract class AbstractNodeElementVisitorInterface implements NodeElementVisitorInterface
 {
     public function visitDynamicAnalysis(DynamicAnalysis &$dynamic_analysis)
@@ -33,6 +32,6 @@ abstract class AbstractNodeElementVisitorInterface implements NodeElementVisitor
 
     public function __toString()
     {
-        return "<".get_class($this).">";
+        return "<" . get_class($this) . ">";
     }
 }

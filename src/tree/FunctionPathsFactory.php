@@ -74,7 +74,7 @@ class FunctionPathsFactory
         string $class,
         string $function_name
     ): FileFunction {
-        $fully_qualified_namespace = $file_location."::";
+        $fully_qualified_namespace = $file_location . "::";
 
         if (!empty($namespace)) {
             $fully_qualified_namespace .= $namespace;
@@ -85,10 +85,10 @@ class FunctionPathsFactory
         }
 
         if (!empty($class)) {
-            $fully_qualified_namespace .= $class."::";
+            $fully_qualified_namespace .= $class . "::";
         }
 
-        return new FileFunction($fully_qualified_namespace.$function_name);
+        return new FileFunction($fully_qualified_namespace . $function_name);
     }
 
     /**

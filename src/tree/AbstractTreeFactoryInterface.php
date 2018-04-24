@@ -7,7 +7,6 @@ declare(strict_types=1);
 abstract class AbstractTreeFactoryInterface implements TreeFactoryInterface
 {
     /**
-     *
      * @return Tree
      */
     public function &produceTree()

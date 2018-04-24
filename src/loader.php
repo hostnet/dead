@@ -4,10 +4,10 @@
  */
 declare(strict_types=1);
 
-if (file_exists(__DIR__ .'/../vendor/autoload.php')) {
-    require_once __DIR__ .'/../vendor/autoload.php';
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
 } else {
-    require_once __DIR__ .'/../../../autoload.php';
+    require_once __DIR__ . '/../../../autoload.php';
 }
 
 if (PHP_SAPI == "cli") {
@@ -32,7 +32,7 @@ if (PHP_SAPI == "cli") {
     error_reporting(E_ALL | E_STRICT);
 }
 
-set_include_path(get_include_path() . PATH_SEPARATOR .  __DIR__);
+set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__);
 
 if (PHP_SAPI == "cli") {
     TaskRunner::main();

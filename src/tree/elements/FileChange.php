@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class FileChange implements NodeElementInterface
 {
-
     /**
      * Date and time when the file was added to
      * the system under inspection.
@@ -81,7 +80,6 @@ class FileChange implements NodeElementInterface
      */
     public function __construct($added_at, $deleted_at)
     {
-
         $this->added_at   = $added_at;
         $this->deleted_at = $deleted_at;
     }

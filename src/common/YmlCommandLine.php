@@ -7,7 +7,6 @@ declare(strict_types=1);
 class YmlCommandLine extends Console_CommandLine
 {
     /**
-     *
      * @param string $filename
      * @return Console_CommandLine
      * @throws Exception
@@ -23,9 +22,9 @@ class YmlCommandLine extends Console_CommandLine
 
         if ($yml !== false) {
             return self::fromYamlString($yml, $config);
-        } else {
-            throw new Exception("Could not read yaml file");
         }
+
+        throw new Exception("Could not read yaml file");
     }
 
     /**
@@ -41,7 +40,7 @@ class YmlCommandLine extends Console_CommandLine
 
     public static function fromYamlString($yml, $config_yml = null)
     {
-        $parser = new SfYamlParser();
+        $parser = new sfYamlParser();
 
         $yml_tree = $parser->parse($yml);
 
@@ -70,7 +69,6 @@ class YmlCommandLine extends Console_CommandLine
     }
 
     /**
-     *
      * @param array $ymltree
      * @param Console_CommandLine $cmd
      * @return Console_CommandLine
@@ -80,7 +78,7 @@ class YmlCommandLine extends Console_CommandLine
     {
         if (isset($ymltree['commands']) && is_array($ymltree['commands'])) {
             foreach ($ymltree['commands'] as $name => $command) {
-                $params  = array_diff_key($command, array('arguments' => null, 'options' => null));
+                $params  = array_diff_key($command, ['arguments' => null, 'options' => null]);
                 $sub_cmd = $cmd->addCommand($name, $params);
                 self::ymlParseOptions($command, $sub_cmd);
                 self::ymlParseArguments($command, $sub_cmd);
@@ -92,7 +90,6 @@ class YmlCommandLine extends Console_CommandLine
     }
 
     /**
-     *
      * @param array $ymltree
      * @param Console_CommandLine $cmd
      * @return Console_CommandLine
@@ -110,7 +107,6 @@ class YmlCommandLine extends Console_CommandLine
     }
 
     /**
-     *
      * @param array $ymltree
      * @param Console_CommandLine $cmd
      * @return Console_CommandLine
@@ -128,7 +124,6 @@ class YmlCommandLine extends Console_CommandLine
     }
 
     /**
-     *
      * @param array $ymltree
      * @return Command_Line
      * @throws Exception
@@ -136,11 +131,11 @@ class YmlCommandLine extends Console_CommandLine
 
     private static function ymlToCmd(array $ymltree)
     {
-        if (isset($ymltree['command'])) {
-            $command = $ymltree['command'];
-        } else {
+        if (!isset($ymltree['command'])) {
             throw new Exception("No Command section found in yaml file");
         }
+
+        $command = $ymltree['command'];
 
         return new Console_CommandLine($command);
     }

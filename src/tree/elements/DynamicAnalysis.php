@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
 {
-
     /**
      * The numer of times a file is included by the
      * application under inspection.
@@ -102,11 +101,10 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
      */
     public function getPctDead()
     {
-        return (int)($this->getRatioDead() * 100);
+        return (int) ($this->getRatioDead() * 100);
     }
 
     /**
-     *
      * @param int $count
      * @param DateTime $first_hit
      * @param DateTime $last_hit
@@ -147,7 +145,6 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
 
 
     /**
-     *
      * @param DynamicAnalysis $analysis
      * @return DynamicAnalysis
      */

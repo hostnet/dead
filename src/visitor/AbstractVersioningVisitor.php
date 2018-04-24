@@ -6,11 +6,9 @@ declare(strict_types=1);
 
 abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitorInterface
 {
-
     const MAX_COMMITS = 1;
 
     /**
-     *
      * @param $path string
      * @return array[int]commit
      */
@@ -20,9 +18,11 @@ abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitorInter
     {
         $commits = $this
             ->getCommits($node->getLocation());
-        if (count($commits)) {
-            $versioning = new Versioning($commits, self::MAX_COMMITS);
-            $node->addElement($versioning);
+        if (!count($commits)) {
+            return;
         }
+
+        $versioning = new Versioning($commits, self::MAX_COMMITS);
+        $node->addElement($versioning);
     }
 }

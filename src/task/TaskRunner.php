@@ -26,9 +26,9 @@ class TaskRunner
 
         try {
             $settings = Settings::instance();
-        } catch (Exception $e) {
-            fwrite($out, $e->getMessage().PHP_EOL);
-            fwrite($out, $e->getTraceAsString().PHP_EOL);
+        } catch (\Throwable $e) {
+            fwrite($out, $e->getMessage() . PHP_EOL);
+            fwrite($out, $e->getTraceAsString() . PHP_EOL);
             fclose($out);
             exit(self::SETTINGS_ERROR);
         }
@@ -41,22 +41,22 @@ class TaskRunner
                 $settings->displayUsage();
             }
 
-            $class = ucfirst($settings->getCommandName())."Task";
+            $class = ucfirst($settings->getCommandName()) . "Task";
 
             try {
                 $task = new $class();
-            } catch (Exception $e) {
-                fwrite($out, "Subcommand misconfiguration in args.yml".PHP_EOL);
-                fwrite($out, $e->getMessage().PHP_EOL);
-                fwrite($out, $e->getTraceAsString().PHP_EOL);
+            } catch (\Throwable $e) {
+                fwrite($out, "Subcommand misconfiguration in args.yml" . PHP_EOL);
+                fwrite($out, $e->getMessage() . PHP_EOL);
+                fwrite($out, $e->getTraceAsString() . PHP_EOL);
                 fclose($out);
                 exit(self::AUTOLOAD_ERROR);
             }
 
             $task->run();
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             $m = $e->getMessage();
-            fwrite($out, "Error occured with message: $m".PHP_EOL);
+            fwrite($out, "Error occured with message: $m" . PHP_EOL);
             fclose($out);
             exit(self::GENERAL_ERROR);
         }

@@ -45,7 +45,6 @@ class PrimeTask extends AbstractPdoTaskInterface
     }
 
     /**
-     *
      * @param $list array[]Node
      * @return array[string]PrimeData
      */
@@ -75,9 +74,11 @@ class PrimeTask extends AbstractPdoTaskInterface
             $file_function_diff = [];
             foreach ($value->getFileFunctions() as $file_function) {
                 $is_in_compare_against = in_array($file_function, $compare_against[$key]->getFileFunctions());
-                if (!$is_in_compare_against) {
-                    $file_function_diff[] = $file_function;
+                if ($is_in_compare_against) {
+                    continue;
                 }
+
+                $file_function_diff[] = $file_function;
             }
             $value->setFileFunctions($file_function_diff);
             $result[$key] = $value;
@@ -171,21 +172,23 @@ class PrimeTask extends AbstractPdoTaskInterface
 
     private function updateChangedFiles(array $diff, array $db)
     {
-        if (count($diff) > 0) {
-            $table = $this->getTable();
-            $sql   = "";
-            $query =
-                "UPDATE $table SET deleted_at = NULL, last_hit=last_hit, changed_at = %s" .
-                "/* was: %s */ WHERE file = \"%s\";\n";
-            foreach ($diff as $file => $data) {
-                $changed_at         = $data->getSQLChangedAt();
-                $current_changed_at = $db[$file]->getSQLChangedAt();
-                $sql               .= sprintf($query, $changed_at, $current_changed_at, $file);
-            }
-
-            $sql;
-            $this->getDb()->exec($sql);
+        if (count($diff) <= 0) {
+            return;
         }
+
+        $table = $this->getTable();
+        $sql   = "";
+        $query =
+            "UPDATE $table SET deleted_at = NULL, last_hit=last_hit, changed_at = %s" .
+            "/* was: %s */ WHERE file = \"%s\";\n";
+        foreach ($diff as $file => $data) {
+            $changed_at         = $data->getSQLChangedAt();
+            $current_changed_at = $db[$file]->getSQLChangedAt();
+            $sql               .= sprintf($query, $changed_at, $current_changed_at, $file);
+        }
+
+        $sql;
+        $this->getDb()->exec($sql);
     }
 
     private function insertNewFiles(array $new)
@@ -213,13 +216,15 @@ class PrimeTask extends AbstractPdoTaskInterface
 
     private function updateDeadFiles($removed)
     {
-        if (count($removed)) {
-            $table  = $this->getTable();
-            $values = implode("\",\"", array_keys($removed));
-            $query  =
-                "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND file IN (\"$values\")";
-            $this->getDb()->exec($query);
+        if (!count($removed)) {
+            return;
         }
+
+        $table  = $this->getTable();
+        $values = implode("\",\"", array_keys($removed));
+        $query  =
+            "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND file IN (\"$values\")";
+        $this->getDb()->exec($query);
     }
 
 

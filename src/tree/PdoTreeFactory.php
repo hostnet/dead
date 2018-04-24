@@ -1,16 +1,12 @@
 <?php
 /**
- * @author Hidde Boomsma <hidde@hostnet.nl>
- * @subpackage tree
  * @copyright 2018 Hostnet B.V.
- * @since 2012.01.22 10:56
  * @link http://www.php.net/manual/en/book.pdo.php
  */
 declare(strict_types=1);
 
 class PdoTreeFactory extends AbstractTreeFactoryInterface
 {
-
     const ALL_FILES                    = true;
     const ONLY_EXISTING_FILES          = false;
     const ALL_FILES_QUERY              = "SELECT * FROM %s";
@@ -27,7 +23,6 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
     private $db;
 
     /**
-     *
      * @var Node[]
      */
     private $leaves;
@@ -35,7 +30,7 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
     public function __construct(PDO $db)
     {
         $this->table_files     = $settings = Settings::instance()->getOption("table");
-        $this->table_functions = $this->table_files."_functions";
+        $this->table_functions = $this->table_files . "_functions";
         $this->db              = $db;
         $this->leaves          = [];
     }
@@ -55,7 +50,6 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
     }
 
     /**
-     *
      * @param bool $all
      * @return void
      */
@@ -73,7 +67,6 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
     }
 
     /**
-     *
      * @param array $row
      * @return Node
      */
@@ -94,7 +87,7 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
         $node = new Node($row['file']);
 
 
-        $version = new Versioning(array(new Commit("", "", $changed_at, "")), 1);
+        $version = new Versioning([new Commit("", "", $changed_at, "")], 1);
         $node->addElement($version);
 
 

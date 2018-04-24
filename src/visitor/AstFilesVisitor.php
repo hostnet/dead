@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class AstFilesVisitor extends AbstractNodeElementVisitorInterface
 {
-
     public function __construct()
     {
     }
@@ -47,8 +46,8 @@ class AstFilesVisitor extends AbstractNodeElementVisitorInterface
     {
         $this->registerNamespaceAst($class);
         $value = ($class->xpath("ast:Token_class_name/ast:value"));
-        $name  = (string)$value[0];
-        $base  = isset($value[1]) ? (string)$value[1] : "";
+        $name  = (string) $value[0];
+        $base  = isset($value[1]) ? (string) $value[1] : "";
 
         echo $name;
         if ($base) {
@@ -75,7 +74,7 @@ class AstFilesVisitor extends AbstractNodeElementVisitorInterface
         $abstract  = $flags[4] == true;
         $final     = $flags[5] == true;
 
-        $name = (string)current(
+        $name = (string) current(
             $method
                 ->xpath(
                     "ast:AST_signature/ast:Token_method_name/ast:value"
@@ -83,7 +82,7 @@ class AstFilesVisitor extends AbstractNodeElementVisitorInterface
         );
         echo "$name\n";
 
-        $assignments = array();
+        $assignments = [];
 
         $invocations = $method
             ->xpath("ast:AST_statement_list//ast:AST_method_invocation");
