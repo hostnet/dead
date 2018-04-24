@@ -4,6 +4,7 @@
  * @copyright 2018 Hostnet B.V.
  */
 declare(strict_types=1);
+
 class Commit
 {
     private $id;

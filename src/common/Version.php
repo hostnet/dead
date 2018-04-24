@@ -6,13 +6,11 @@ declare(strict_types=1);
 
 class Version
 {
-
     const SMALLER = -1;
     const EQUAL   = 0;
     const BIGGER  = 1;
 
     /**
-     *
      * @param string $first
      * @param string $second
      * @param string $delimiter
@@ -32,7 +30,9 @@ class Version
             if ($value > $second[$i]) {
                 $r = self::BIGGER;
                 break;
-            } elseif ($value < $second[$i]) {
+            }
+
+            if ($value < $second[$i]) {
                 $r = self::SMALLER;
                 break;
             }

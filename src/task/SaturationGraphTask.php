@@ -4,14 +4,8 @@
  */
 declare(strict_types=1);
 
-/**
- *
- * @author Hidde Boomsma <hidde@hostnet.nl>
- *
- */
 class SaturationGraphTask extends AbstractPdoTaskInterface
 {
-
     private $output = "php://output";
     private $width;
     private $height;
@@ -53,13 +47,13 @@ class SaturationGraphTask extends AbstractPdoTaskInterface
         if ($tables === null) {
             try {
                 $tables = $settings->getCommand()->getCommand()->getArgument("tables");
-            } catch (Exception $e) {
-                $tables = array();
+            } catch (\Throwable $e) {
+                $tables = [];
             }
             if (count($tables) > 0) {
                 $this->tables = $tables;
             } else {
-                $this->tables = array($this->getTable());
+                $this->tables = [$this->getTable()];
             }
         } else {
             $this->tables = $tables;
@@ -75,11 +69,11 @@ class SaturationGraphTask extends AbstractPdoTaskInterface
 
     public function run()
     {
-        $data = array();
+        $data = [];
         foreach ($this->tables as $table) {
             try {
                 $data[] = $this->fetchDataSet($this->path, $table, $this->scale);
-            } catch (Exception $e) {
+            } catch (\Throwable $e) {
                 print_r($e);
             }
         }
@@ -109,13 +103,13 @@ class SaturationGraphTask extends AbstractPdoTaskInterface
        HAVING added_at IS NULL OR added_at = min_added_at 
        ";
         $statement   = $db->query($sql);
-        $row         = array();
+        $row         = [];
         while (($row = $statement->fetch(PDO::FETCH_NUM)) == true) {
             $accumulated += $row[1];
             if ($this->scale === true) {
                 $days  = $row[3];
                 $time  = $row[0] - $days;
-                $pct   = (int)($accumulated / $row[4] * 100);
+                $pct   = (int) ($accumulated / $row[4] * 100);
                 $data .= "$time $pct\n";
             } else {
                 $data .= "$row[0] $accumulated\n";
@@ -123,9 +117,9 @@ class SaturationGraphTask extends AbstractPdoTaskInterface
         }
 
         if ($scale) {
-            $data .= time() - $days." ".$pct."\n";
+            $data .= time() - $days . " " . $pct . "\n";
         } else {
-            $data .= time()." ".$accumulated."\n";
+            $data .= time() . " " . $accumulated . "\n";
         }
 
         return $data;

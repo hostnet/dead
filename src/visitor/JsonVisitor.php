@@ -11,7 +11,6 @@ class JsonVisitor extends AbstractNodeElementVisitorInterface
     private $json;
 
     /**
-     *
      * @param $dynamic_analysis DynamicAnalysis
      */
     public function visitDynamicAnalysis(DynamicAnalysis &$dynamic_analysis)
@@ -31,9 +30,9 @@ class JsonVisitor extends AbstractNodeElementVisitorInterface
     {
         if ($value instanceof DateTime) {
             return $value->format("Y-m-d");
-        } else {
-            return "N/A";
         }
+
+        return "N/A";
     }
 
     /**
@@ -45,7 +44,6 @@ class JsonVisitor extends AbstractNodeElementVisitorInterface
      */
     public function visitNode(Node &$node)
     {
-
         $changed_at = $this->formatDate($this->versioning->getLastChange());
         $first_hit  = $this->formatDate($this->dynamic_analysis->getFirstHit());
         $last_hit   = $this->formatDate($this->dynamic_analysis->getLastHit());

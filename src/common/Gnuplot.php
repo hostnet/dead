@@ -15,7 +15,7 @@ class Gnuplot
         $output = "";
         $errors = "";
 
-        $spec = array(0 => array("pipe", "r"), 1 => array("pipe", "w"), 2 => array("pipe", "w"));
+        $spec = [0 => ["pipe", "r"], 1 => ["pipe", "w"], 2 => ["pipe", "w"]];
         $proc = proc_open(self::$gnuplot_command, $spec, $pipe);
         if (is_resource($proc)) {
             fwrite($pipe[0], $commands);
@@ -39,7 +39,7 @@ class Gnuplot
             fwrite($err, $errors);
             fclose($err);
         } else {
-            $output = $errors.$output;
+            $output = $errors . $output;
         }
 
         return $output;

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 abstract class AbstractPdoTaskInterface implements TaskInterface
 {
-
     const ESCAPE    = true;
     const NO_ESCAPE = false;
 
@@ -62,16 +61,15 @@ abstract class AbstractPdoTaskInterface implements TaskInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
 
     protected function isConnected()
     {
-        return ($this->db === null);
+        return $this->db === null;
     }
 
     /**
-     *
      * @return PDO
      */
 
@@ -91,11 +89,10 @@ abstract class AbstractPdoTaskInterface implements TaskInterface
 
     public function getFunctionsTable()
     {
-        return $this->table."_functions";
+        return $this->table . "_functions";
     }
 
     /**
-     *
      * @param mixed $field
      * @return string;
      */
@@ -106,7 +103,6 @@ abstract class AbstractPdoTaskInterface implements TaskInterface
     }
 
     /**
-     *
      * @param mixed $field
      * @return string;
      */

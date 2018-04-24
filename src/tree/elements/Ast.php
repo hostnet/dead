@@ -7,7 +7,6 @@ declare(strict_types=1);
 class Ast implements NodeElementInterface
 {
     /**
-     *
      * @var string
      */
     private $ast;
@@ -18,7 +17,6 @@ class Ast implements NodeElementInterface
     }
 
     /**
-     *
      * @param string $ast
      */
     public function __construct($ast)

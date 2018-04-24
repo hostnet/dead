@@ -6,16 +6,13 @@ declare(strict_types=1);
 
 class PrimeData
 {
-
     /**
-     *
      * @var string
      */
     private $changed_at;
 
     /**
-     *
-     * @var boolean
+     * @var bool
      */
     private $dead;
 
@@ -41,7 +38,6 @@ class PrimeData
     }
 
     /**
-     *
      * @return string
      */
     public function getChangedAt()
@@ -53,14 +49,13 @@ class PrimeData
     {
         if ($this->changed_at !== "") {
             return "\"$this->changed_at\"";
-        } else {
-            return "NULL";
         }
+
+        return "NULL";
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      */
     public function getDead()
     {
@@ -68,7 +63,6 @@ class PrimeData
     }
 
     /**
-     *
      * @param int $changed_at string
      * @param $dead boolean
      * @param FileFunction[] $file_functions

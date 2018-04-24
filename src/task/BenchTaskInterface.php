@@ -8,26 +8,24 @@ class BenchTaskInterface implements TaskInterface
 {
     private function addTable($factory, $table)
     {
-        global $time_start;
+        $GLOBALS['time_start'];
 
         $factory->setTable($table);
         try {
             $factory->query();
-        } catch (Exception $e) {
+        } catch (\Throwable $e) {
             echo 'Caught exception: ', $e->getMessage(), "\n";
         }
         $factory->produceTree();
 
-        $time  = sprintf("%5.2f", microtime(true) - $time_start);
+        $time  = sprintf("%5.2f", microtime(true) - $GLOBALS['time_start']);
         $mem   = sprintf("%4.1f", (memory_get_usage()) / 1024 / 1024);
         $count = sprintf("%10d", $factory->countLeaves());
-        echo "$count $mem $time".PHP_EOL;
+        echo "$count $mem $time" . PHP_EOL;
     }
 
     public function run()
     {
-
-
         $factory = new PdoTreeFactory($this->getDb());
         self::addTable($factory, "none");
         self::addTable($factory, "ontrack");

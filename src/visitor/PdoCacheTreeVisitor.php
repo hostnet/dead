@@ -6,10 +6,9 @@ declare(strict_types=1);
 
 class PdoCacheTreeVisitor extends AbstractNodeElementVisitorInterface
 {
-
     private $dynamic_analysis;
     private $versioning;
-    private $data = array();
+    private $data = [];
 
     public function __construct()
     {
@@ -18,15 +17,15 @@ class PdoCacheTreeVisitor extends AbstractNodeElementVisitorInterface
     public function visitNode(Node &$node)
     {
         // Put all the data in the structure
-        $this->data[] = array(
+        $this->data[] = [
             "file"       => $node->getFullPath(),
-            "count"      => (int)$this->dynamic_analysis->getCount(),
-            "file_count" => (int)$this->dynamic_analysis->getFileCount(),
-            "dead_count" => (int)$this->dynamic_analysis->getDeadCount(),
+            "count"      => (int) $this->dynamic_analysis->getCount(),
+            "file_count" => (int) $this->dynamic_analysis->getFileCount(),
+            "dead_count" => (int) $this->dynamic_analysis->getDeadCount(),
             "first_hit"  => $this->dynamic_analysis->getFirstHit(),
             "last_hit"   => $this->dynamic_analysis->getLastHit(),
             "changed_at" => $this->versioning->getLastChange(),
-        );
+        ];
     }
 
     public function visitNodeFirst(Node &$node)

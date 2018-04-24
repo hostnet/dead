@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class StatsTask extends AbstractPdoTaskInterface
 {
-
     private $output;
     private $path;
     private $date_format;
@@ -79,7 +78,7 @@ class StatsTask extends AbstractPdoTaskInterface
 
     private function latex($data)
     {
-        $prefix = $this->latex_prefix.ucfirst($this->parseNumberToText($this->getTable()));
+        $prefix = $this->latex_prefix . ucfirst($this->parseNumberToText($this->getTable()));
         echo <<<EOD
 \\newcommand{\\${prefix}PctAlive}{{$data['pct_alive']}}
 \\newcommand{\\${prefix}PctDead}{{$data['pct_dead']}}

@@ -22,7 +22,6 @@ class Settings
     private static $instance = null;
 
     /**
-     *
      * @param Settings $settings
      * @param null $parser
      */
@@ -35,8 +34,8 @@ class Settings
                 $phardir = realpath(dirname(Phar::running(false)));
                 if (file_exists('/etc/dead.conf')) {
                     $config_file = '/etc/dead.conf';
-                } elseif (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'].'/.deadrc')) {
-                    $config_file = $_SERVER['HOME'].'/.deadrc';
+                } elseif (isset($_SERVER['HOME']) && file_exists($_SERVER['HOME'] . '/.deadrc')) {
+                    $config_file = $_SERVER['HOME'] . '/.deadrc';
                     echo "found $config_file";
                 } elseif (file_exists("$phardir/config.yml")) {
                     $config_file = "$phardir/config.yml";
@@ -45,7 +44,7 @@ class Settings
                 }
                 $this->parser   = YmlCommandLine::fromYmlFile("args.yml", $config_file);
                 $this->settings = $this->parser->parse();
-            } catch (Exception $exc) {
+            } catch (\Throwable $exc) {
                 $this->parser->displayError($exc->getMessage());
             }
         } else {
@@ -90,26 +89,26 @@ class Settings
                 $this->settings->command,
                 $this->parser->commands[$this->getCommandName()]
             );
-        } else {
-            throw new SettingsException("Sub Command");
         }
+
+        throw new SettingsException("Sub Command");
     }
 
     public function getOption($name)
     {
         if (isset($this->settings->options[$name])) {
             return $this->settings->options[$name];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function getArgument($name)
     {
         if (isset($this->settings->args[$name])) {
             return $this->settings->args[$name];
-        } else {
-            throw new SettingsException($name);
         }
+
+        throw new SettingsException($name);
     }
 }

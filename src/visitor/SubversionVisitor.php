@@ -6,17 +6,14 @@ declare(strict_types=1);
 
 class SubversionVisitor extends AbstractVersioningVisitor
 {
-    private $svn_command = "/usr/bin/env svn";
-    private $mode;
-    private $path;
-
-    private $xml = null;
-
-    private $min_svn = "1.4.0";
-
     const SVN_LIST = 0;
     const SVN_INFO = 1;
     const SVN_LOG  = 2;
+    private $svn_command = "/usr/bin/env svn";
+    private $mode;
+    private $path;
+    private $xml = null;
+    private $min_svn = "1.4.0";
 
     public function __construct($path = null, $mode = self::SVN_INFO)
     {
@@ -29,17 +26,32 @@ class SubversionVisitor extends AbstractVersioningVisitor
             throw new Exception("Please use Subversion version $this->min_svn or higher");
         }
 
-        if ($mode === self::SVN_LIST) {
-            $this->execSvnList();
+        if ($mode !== self::SVN_LIST) {
+            return;
         }
+
+        $this->execSvnList();
+    }
+
+    private function execSvnVersion()
+    {
+        $result = shell_exec("$this->svn_command --version");
+        $return = "";
+
+        preg_match("/^svn, version ([0-9]+.[0-9]+.[0-9]+) /", $result, $matches);
+        if (isset($matches[1])) {
+            $return = $matches[1];
+        }
+
+        return $return;
     }
 
     private function execSvnList()
     {
         if (file_exists($this->path)) {
             if ($this->xml === null) {
-                $this->xml = array();
-                $data      = `$this->svn_command list -R --xml $this->path`;
+                $this->xml = [];
+                $data      = shell_exec("$this->svn_command list -R --xml $this->path");
                 echo "Loaded all Subversion information from disk\n";
                 $xml = new SimpleXMLElement($data);
                 foreach ($xml->list->entry as $entry) {
@@ -52,9 +64,81 @@ class SubversionVisitor extends AbstractVersioningVisitor
         return $this->xml;
     }
 
+    public function visitFunctionName(FileFunction $file_function)
+    {
+        // TODO: Implement visitFunctionName() method.
+    }
+
+    protected function getCommits($path)
+    {
+        $commits = [];
+        switch ($this->mode) {
+            case self::SVN_INFO:
+                $result  = $this->execSvnInfo($path);
+                $commits = $this->processExecSvnInfoResult($result);
+                break;
+            case self::SVN_LOG:
+                $result  = $this->execLogSvn($path);
+                $commits = $this->processExecSvnLogResult($result);
+                break;
+            case self::SVN_LIST:
+                $commits = $this->processExecSvnListResult($path);
+                break;
+        }
+
+        return $commits;
+    }
+
+    private function execSvnInfo($path)
+    {
+        $command = sprintf("%s info %s 2>&1", $this->svn_command, $path);
+        $result  = shell_exec($command);
+
+        return $result;
+    }
+
+    private function processExecSvnInfoResult($result)
+    {
+        $commits = [];
+        preg_match_all(
+            '/\nLast Changed Author: (.+)\nLast Changed Rev: (.+)\nLast Changed Date: (.+)\(/',
+            $result,
+            $matches,
+            PREG_SET_ORDER
+        );
+        foreach ($matches as $match) {
+            $id     = $match[2];
+            $author = $match[1];
+            // 2012-01-16 09:21:51 +0100 (ma, 16 jan 2012)
+            $date      = new DateTime($match[3]);
+            $message   = "not available in SVN_INFO mode";
+            $commit    = new Commit($id, $author, $date, $message);
+            $commits[] = $commit;
+        }
+
+        return $commits;
+    }
+
+    private function processExecSvnLogResult($result)
+    {
+        $commits = [];
+        preg_match_all('/r([0-9]+) \| (.+) \| (.+) \(.+\n\n(.*)\n------/msU', $result, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $id     = $match[1];
+            $author = $match[2];
+            // 2012-01-16 09:21:51 +0100 (ma, 16 jan 2012)
+            $date      = DateTime::createFromFormat("Y-m-d H:m:s O", $match[3]);
+            $message   = $match[4];
+            $commit    = new Commit($id, $author, $date, $message);
+            $commits[] = $commit;
+        }
+
+        return $commits;
+    }
+
     private function processExecSvnListResult($path)
     {
-        $commits = array();
+        $commits = [];
 
         $len = strlen($this->path);
         if ($this->path[$len - 1] !== DIRECTORY_SEPARATOR) {
@@ -76,96 +160,11 @@ class SubversionVisitor extends AbstractVersioningVisitor
         return $commits;
     }
 
-    private function execSvnVersion()
-    {
-        $result = `$this->svn_command --version`;
-        $return = "";
-
-        preg_match("/^svn, version ([0-9]+.[0-9]+.[0-9]+) /", $result, $matches);
-        if (isset($matches [1])) {
-            $return = $matches [1];
-        }
-
-        return $return;
-    }
-
-    private function execSvnInfo($path)
-    {
-        $command = sprintf("%s info %s 2>&1", $this->svn_command, $path);
-        $result  = `$command`;
-
-        return $result;
-    }
-
     private function execSvnLog($path, $max = 1)
     {
         $command = sprintf("%s log %s -l %d 2>&1", $this->svn_command, $path, $max);
-        $result  = `$command`;
+        $result  = shell_exec($command);
 
         return $result;
-    }
-
-    private function processExecSvnInfoResult($result)
-    {
-        $commits = array();
-        preg_match_all(
-            '/\nLast Changed Author: (.+)\nLast Changed Rev: (.+)\nLast Changed Date: (.+)\(/',
-            $result,
-            $matches,
-            PREG_SET_ORDER
-        );
-        foreach ($matches as $match) {
-            $id     = $match [2];
-            $author = $match [1];
-            // 2012-01-16 09:21:51 +0100 (ma, 16 jan 2012)
-            $date       = new DateTime($match [3]);
-            $message    = "not available in SVN_INFO mode";
-            $commit     = new Commit($id, $author, $date, $message);
-            $commits [] = $commit;
-        }
-
-        return $commits;
-    }
-
-    private function processExecSvnLogResult($result)
-    {
-        $commits = array();
-        preg_match_all('/r([0-9]+) \| (.+) \| (.+) \(.+\n\n(.*)\n------/msU', $result, $matches, PREG_SET_ORDER);
-        foreach ($matches as $match) {
-            $id     = $match [1];
-            $author = $match [2];
-            // 2012-01-16 09:21:51 +0100 (ma, 16 jan 2012)
-            $date       = DateTime::createFromFormat("Y-m-d H:m:s O", $match [3]);
-            $message    = $match [4];
-            $commit     = new Commit($id, $author, $date, $message);
-            $commits [] = $commit;
-        }
-
-        return $commits;
-    }
-
-    protected function getCommits($path)
-    {
-        $commits = array();
-        switch ($this->mode) {
-            case self::SVN_INFO:
-                $result  = $this->execSvnInfo($path);
-                $commits = $this->processExecSvnInfoResult($result);
-                break;
-            case self::SVN_LOG:
-                $result  = $this->execLogSvn($path);
-                $commits = $this->processExecSvnLogResult($result);
-                break;
-            case self::SVN_LIST:
-                $commits = $this->processExecSvnListResult($path);
-                break;
-        }
-
-        return $commits;
-    }
-
-    public function visitFunctionName(FileFunction $file_function)
-    {
-        // TODO: Implement visitFunctionName() method.
     }
 }

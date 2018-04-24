@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class GraphTaskInterface implements TaskInterface
 {
-
     public function run()
     {
         $settings = Settings::instance()->getCommand();

@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class ResourceIterator implements Iterator
 {
-
     private $current_line = null;
 
     private $handle;
@@ -21,9 +20,9 @@ class ResourceIterator implements Iterator
     {
         if ($this->current_line) {
             return $this->current_line;
-        } else {
-            return $this->next();
         }
+
+        return $this->next();
     }
 
     public function next()
@@ -44,8 +43,10 @@ class ResourceIterator implements Iterator
     public function rewind()
     {
         $meta = stream_get_meta_data($this->handle);
-        if ($meta['seekable']) {
-            rewind($handle);
+        if (!$meta['seekable']) {
+            return;
         }
+
+        rewind($handle);
     }
 }

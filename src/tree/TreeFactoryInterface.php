@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 interface TreeFactoryInterface
 {
-
     /**
      * @return array[int]Node
      */

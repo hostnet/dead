@@ -6,10 +6,9 @@ declare(strict_types=1);
 
 class FileTreeFactory extends AbstractTreeFactoryInterface
 {
-    private $files = array();
+    private $files = [];
 
     /**
-     *
      * @param $path string
      * @param $extension string
      * @return self
@@ -26,8 +25,8 @@ class FileTreeFactory extends AbstractTreeFactoryInterface
                 $this->addFile($file->getPathname());
             }
         } catch (UnexpectedValueException $e) {
-            echo "Could not open dir $path".PHP_EOL;
-        } catch (Exception $e) {
+            echo "Could not open dir $path" . PHP_EOL;
+        } catch (\Throwable $e) {
             die($e->getMessage());
         }
 

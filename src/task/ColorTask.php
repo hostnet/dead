@@ -6,7 +6,6 @@ declare(strict_types=1);
 
 class ColorTask extends AbstractPdoTaskInterface
 {
-
     private $output;
     private $path;
 
