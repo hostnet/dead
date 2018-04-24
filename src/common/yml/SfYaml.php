@@ -16,7 +16,7 @@
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @version    SVN: $Id: sfYaml.class.php 8988 2008-05-15 20:24:26Z fabien $
  */
-class SfYaml
+class sfYaml
 {
   static protected
     $spec = '1.2';
@@ -88,7 +88,7 @@ class SfYaml
     }
 
 
-    $yaml = new SfYamlParser();
+    $yaml = new sfYamlParser();
 
     try
     {
@@ -116,7 +116,7 @@ class SfYaml
   public static function dump($array, $inline = 2)
   {
 
-    $yaml = new SfYamlDumper();
+    $yaml = new sfYamlDumper();
 
     return $yaml->dump($array, $inline);
   }

@@ -17,7 +17,7 @@
  * @author     Fabien Potencier <fabien.potencier@symfony-project.com>
  * @version    SVN: $Id: sfYamlDumper.class.php 10575 2008-08-01 13:08:42Z nicolas $
  */
-class SfYamlDumper
+class sfYamlDumper
 {
   /**
    * Dumps a PHP value to YAML.
@@ -35,7 +35,7 @@ class SfYamlDumper
 
     if ($inline <= 0 || !is_array($input) || empty($input))
     {
-      $output .= $prefix.SfYamlInline::dump($input);
+      $output .= $prefix.sfYamlInline::dump($input);
     }
     else
     {
@@ -47,7 +47,7 @@ class SfYamlDumper
 
         $output .= sprintf('%s%s%s%s',
           $prefix,
-          $isAHash ? SfYamlInline::dump($key).':' : '-',
+          $isAHash ? sfYamlInline::dump($key).':' : '-',
           $willBeInlined ? ' ' : "\n",
           $this->dump($value, $inline - 1, $willBeInlined ? 0 : $indent + 2)
         ).($willBeInlined ? "\n" : '');
