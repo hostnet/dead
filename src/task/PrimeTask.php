@@ -57,6 +57,7 @@ class PrimeTask extends AbstractPdoTaskInterface
 
         foreach (array_keys($list) as $key) {
             $list[$key]->accept($visitor);
+            $visitor->resetFunctions();
         }
 
         return $visitor->getPrimeData();
@@ -98,7 +99,7 @@ class PrimeTask extends AbstractPdoTaskInterface
     {
         // Read all files from the databse
         $factory = new PdoTreeFactory($this->getDb());
-        $factory->query(PdoTreeFactory::ALL);
+        $factory->query(PdoTreeFactory::ALL_FILES);
         $list = $factory->produceList();
 
         return $list;

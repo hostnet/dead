@@ -99,6 +99,11 @@ class PrimeVisitor extends AbstractNodeElementVisitorInterface
         $this->data = array();
     }
 
+    public function resetFunctions()
+    {
+        $this->functions = [];
+    }
+
     public function setPrefix($prefix)
     {
         $this->prefix = $prefix;

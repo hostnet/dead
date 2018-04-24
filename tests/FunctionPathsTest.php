@@ -13,6 +13,7 @@ class FunctionPathsTest extends TestCase
     {
         $this->markTestIncomplete("Test is not yet ready because of edge case");
         $current_location = __DIR__;
+        $results          = [];
         $expected_results = [
             $current_location."/fixtures/A.php::test1",
             $current_location."/fixtures/A.php::inTest1",
@@ -25,10 +26,14 @@ class FunctionPathsTest extends TestCase
             $current_location."/fixtures/ClassC.php::Dead\TestNamespace\ClassD::test6",
         ];
 
-        $files          = (new FileTreeFactory())->scan("./fixtures")->produceList();
-        $php_tokens     = new FunctionPathsFactory($files);
-        $function_paths = $php_tokens->produceList();
-        $difference     = array_diff($expected_results, $function_paths);
+        $files = (new FileTreeFactory())->scan("./fixtures")->produceList();
+        foreach ($files as $file) {
+            $file_functions = (new FunctionPathsFactory())->produceList($file);
+            foreach ($file_functions as $file_function) {
+                $results[] = $file_function->getFunction();
+            }
+        }
+        $difference = array_diff($expected_results, $results);
         self::assertEmpty($difference, "Not all functions have been found or formatted correctly.");
     }
 }
