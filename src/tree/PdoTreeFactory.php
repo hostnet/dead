@@ -61,41 +61,49 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
         $statement->execute();
 
         while (($row = $statement->fetch()) !== false) {
-            $this->leaves[] = $this->parseRow($row);
+            $functions      = $this->queryFunctions($row["file"]);
+            $this->leaves[] = $this->parseRow($row, $functions);
         }
         $statement = null;
     }
 
     /**
+     * @param string $file_path
+     * @return array
+     */
+    protected function queryFunctions(string $file_path): array
+    {
+        $query     = "SELECT * FROM $this->table_functions WHERE function LIKE '%$file_path%';";
+        $statement = $this->db->query($query);
+        $statement->execute();
+
+        return $statement->fetchAll();
+    }
+
+    /**
      * @param array $row
+     * @param array $functions
      * @return Node
      */
-    protected function parseRow(array &$row)
+    protected function parseRow(array &$row, array $functions): Node
     {
         $count      = empty($row["count"]) ? 0 : $row["count"];
-        $first_hit  = empty($row["first_hit"]) ? null
-            : new DateTime($row["first_hit"]);
-        $last_hit   = empty($row["last_hit"]) ? null
-            : new DateTime($row["last_hit"]);
-        $added_at   = empty($row["added_at"]) ? null
-            : new DateTime($row["added_at"]);
-        $deleted_at = empty($row["deleted_at"]) ? null
-            : new DateTime($row["deleted_at"]);
-        $changed_at = empty($row["changed_at"]) ? null
-            : new DateTime($row["changed_at"]);
+        $first_hit  = empty($row["first_hit"]) ? null : new DateTime($row["first_hit"]);
+        $last_hit   = empty($row["last_hit"]) ? null : new DateTime($row["last_hit"]);
+        $added_at   = empty($row["added_at"]) ? null : new DateTime($row["added_at"]);
+        $deleted_at = empty($row["deleted_at"]) ? null : new DateTime($row["deleted_at"]);
+        $changed_at = empty($row["changed_at"]) ? null : new DateTime($row["changed_at"]);
+        $version    = new Versioning([new Commit("", "", $changed_at, "")], 1);
+        $analysis   = new DynamicAnalysis($count, $first_hit, $last_hit);
+        $file       = new FileChange($added_at, $deleted_at);
 
         $node = new Node($row['file']);
-
-
-        $version = new Versioning([new Commit("", "", $changed_at, "")], 1);
         $node->addElement($version);
-
-
-        $analysis = new DynamicAnalysis($count, $first_hit, $last_hit);
         $node->addElement($analysis);
-
-        $file = new FileChange($added_at, $deleted_at);
         $node->addElement($file);
+        foreach ($functions as $function) {
+            $node->addElement(new FileFunction($function["function"]));
+        }
 
         return $node;
     }

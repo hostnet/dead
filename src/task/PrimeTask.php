@@ -65,23 +65,20 @@ class PrimeTask extends AbstractPdoTaskInterface
     /**
      * @param Node[] $compare_from
      * @param Node[] $compare_against
-     * @return Node[]
+     * @return String[]
      */
     private function getFileFunctionDifference(array $compare_from, array $compare_against): array
     {
         $result = [];
         foreach ($compare_from as $key => $value) {
-            $file_function_diff = [];
             foreach ($value->getFileFunctions() as $file_function) {
                 $is_in_compare_against = in_array($file_function, $compare_against[$key]->getFileFunctions());
                 if ($is_in_compare_against) {
                     continue;
                 }
 
-                $file_function_diff[] = $file_function;
+                $result[] = $file_function;
             }
-            $value->setFileFunctions($file_function_diff);
-            $result[$key] = $value;
         }
 
         return $result;
@@ -158,10 +155,11 @@ class PrimeTask extends AbstractPdoTaskInterface
         // data compared to the database
         $diff = array_diff_assoc($cleaned_local_nodes, $cleaned_database_nodes);
 
-        $new_file_functions     = $this->getFileFunctionDifference($cleaned_local_nodes, $cleaned_database_nodes);
-        $deleted_file_functions = $this->getFileFunctionDifference($cleaned_database_nodes, $cleaned_local_nodes);
+        $new_file_functions     = $this->getFileFunctionDifference($prime_local_nodes, $prime_database_nodes);
+        $deleted_file_functions = $this->getFileFunctionDifference($prime_database_nodes, $prime_local_nodes);
 
         $this->insertNewFileFunctions($new_file_functions);
+        $this->updateDeadFunctions($deleted_file_functions);
         // Commit all data to the database
         $this->getDb()->beginTransaction();
         $this->insertNewFiles($new_local_nodes);
@@ -238,17 +236,30 @@ class PrimeTask extends AbstractPdoTaskInterface
         if (empty($new)) {
             return;
         }
-        $table  = $this->getFunctionsTable();
-        $db     = $this->getDb();
-        $values = [];
+        $table = $this->getFunctionsTable();
+        $db    = $this->getDb();
 
-        foreach ($new as $data) {
-            foreach ($data->getFileFunctions() as $file_function) {
-                $values[] = "(\"$file_function\", NOW())";
-            }
+        foreach ($new as $file_function) {
+            $query_string = "INSERT INTO $table (function, added_at) VALUES (:file_function, NOW())";
+            $query        = $db->prepare($query_string);
+            $query->bindParam(":file_function", $file_function);
+            $query->execute();
         }
-        $values_string = join(", ", $values);
-        $query         = $db->prepare("INSERT INTO $table (function, added_at) VALUES $values_string");
-        $db->exec($query->queryString);
+    }
+
+    private function updateDeadFunctions(array $dead_functions): void
+    {
+        if (empty($dead_functions)) {
+            return;
+        }
+        $table = $this->getFunctionsTable();
+        $db    = $this->getDb();
+
+        foreach ($dead_functions as $file_function) {
+            $query_string = "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND function = :file_function";
+            $query        = $db->prepare($query_string);
+            $query->bindParam(":file_function", $file_function);
+            $query->execute();
+        }
     }
 }
