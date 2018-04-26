@@ -69,7 +69,7 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
 
     /**
      * @param string $file_path
-     * @return array
+     * @return array[]
      */
     protected function queryFunctions(string $file_path): array
     {
