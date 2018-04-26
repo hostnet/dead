@@ -256,7 +256,8 @@ class PrimeTask extends AbstractPdoTaskInterface
         $db    = $this->getDb();
 
         foreach ($dead_functions as $file_function) {
-            $query_string = "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND function = :file_function";
+            $query_string =
+                "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND function = :file_function";
             $query        = $db->prepare($query_string);
             $query->bindParam(":file_function", $file_function);
             $query->execute();
