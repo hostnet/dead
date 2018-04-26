@@ -78,7 +78,7 @@ class PrimeTask extends AbstractPdoTaskInterface
                     $result[] = $file_function;
                     continue;
                 }
-                $is_in_compare_against = in_array($file_function, $compare_against[$key]->getFileFunctions(), true);
+                $is_in_compare_against = \in_array($file_function, $compare_against[$key]->getFileFunctions(), true);
                 if ($is_in_compare_against) {
                     continue;
                 }
@@ -239,7 +239,7 @@ class PrimeTask extends AbstractPdoTaskInterface
     private function insertNewFileFunctions(iterable $new): void
     {
         // early return when there is nothing to be added
-        if (0 === count($new)) {
+        if (0 === \count($new)) {
             return;
         }
         $table = $this->getFunctionsTable();
@@ -258,7 +258,7 @@ class PrimeTask extends AbstractPdoTaskInterface
      */
     private function updateDeadFunctions(iterable $dead_functions): void
     {
-        if (0 === count($dead_functions)) {
+        if (0 === \count($dead_functions)) {
             return;
         }
         $table = $this->getFunctionsTable();
