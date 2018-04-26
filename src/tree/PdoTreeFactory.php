@@ -82,7 +82,7 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
 
     /**
      * @param array $row
-     * @param array $functions
+     * @param array[] $functions
      * @return Node
      */
     protected function parseRow(array &$row, array $functions): Node
