@@ -72,6 +72,12 @@ class PrimeTask extends AbstractPdoTaskInterface
         $result = [];
         foreach ($compare_from as $key => $value) {
             foreach ($value->getFileFunctions() as $file_function) {
+                $compare_against_node = $compare_against[$key];
+                // If node doesn't exist in compare_against then add it to the difference
+                if (is_null($compare_against_node)) {
+                    $result[] = $file_function;
+                    continue;
+                }
                 $is_in_compare_against = in_array($file_function, $compare_against[$key]->getFileFunctions());
                 if ($is_in_compare_against) {
                     continue;
@@ -228,9 +234,9 @@ class PrimeTask extends AbstractPdoTaskInterface
 
     /**
      * Constructs the SQL query and executes it.
-     * @param Node[] $new
+     * @param string[] $new
      */
-    private function insertNewFileFunctions(array $new)
+    private function insertNewFileFunctions(array $new): void
     {
         // early return when there is nothing to be added
         if (empty($new)) {
@@ -246,6 +252,10 @@ class PrimeTask extends AbstractPdoTaskInterface
         }
     }
 
+
+    /**
+     * @param string[] $dead_functions
+     */
     private function updateDeadFunctions(array $dead_functions): void
     {
         if (empty($dead_functions)) {
