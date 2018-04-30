@@ -30,31 +30,36 @@ class FunctionPathsFactory
         $function_paths = [];
 
         // Namespace and class values will be reset for every file.
-        $namespace = "";
+        $namespace = '';
         // There can be multiple classes in one file, so expect this value to change
         // TODO detect when leaving a class. (counting curly brackets?)
-        $class = "";
-        foreach ($file["tokens"] as $token_index => $token) {
+        $class = '';
+        foreach ($file['tokens'] as $token_index => $token) {
             switch ($token[0]) {
                 case T_CLASS:
-                    $class = $file["tokens"][$token_index + 2][1];
+                    $class = $file['tokens'][$token_index + 2][1];
                     break;
 
                 case T_NAMESPACE:
                     $i = $token_index;
-                    while ($file["tokens"][$i] !== ";") {
-                        if ($file["tokens"][$i][0] === T_NS_SEPARATOR ||
-                            $file["tokens"][$i][0] === T_STRING) {
-                            $namespace .= $file["tokens"][$i][1];
+                    while ($file['tokens'][$i] !== ';') {
+                        if ($file['tokens'][$i][0] === T_NS_SEPARATOR ||
+                            $file['tokens'][$i][0] === T_STRING) {
+                            $namespace .= $file['tokens'][$i][1];
                         }
                         $i += 1;
                     }
                     break;
 
                 case T_FUNCTION:
-                    $function_name    = $file["tokens"][$token_index + 2][1];
+                    $i                   = $token_index;
+                    $function_name_token = $file['tokens'][$i];
+                    while (($function_name_token[0] ?? 0) !== T_STRING) {
+                        $function_name_token = $file['tokens'][$i++];
+                    }
+                    $function_name    = $function_name_token[1];
                     $function_paths[] = $this->generateFileFunction(
-                        $file["location"],
+                        $file['location'],
                         $namespace,
                         $class,
                         $function_name
