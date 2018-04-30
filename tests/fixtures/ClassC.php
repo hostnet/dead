@@ -8,13 +8,9 @@ namespace Dead\TestNamespace;
 
 class ClassC
 {
-    private function test4()
+    private function test5()
     {
     }
-}
-
-function test5()
-{
 }
 
 class ClassD

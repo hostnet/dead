@@ -16,4 +16,8 @@ class ClassB
         {
         }
     }
+
+    private function &test4()
+    {
+    }
 }
