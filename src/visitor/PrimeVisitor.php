@@ -43,7 +43,31 @@ class PrimeVisitor extends AbstractNodeElementVisitorInterface
 
     public function visitFunctionName(FileFunction $file_function)
     {
-        $this->functions[] = $file_function->getFunction();
+        $changed_at = "";
+        $dead       = false;
+
+        if ($this->versioning !== null) {
+            $last_change = $this->versioning->getLastChange();
+            if ($last_change !== null) {
+                $timezone = new DateTimeZone(date_default_timezone_get());
+
+                $last_change->setTimezone($timezone);
+                $changed_at = $last_change->format("Y-m-d H:i:s");
+            }
+            $this->versioning = null;
+        }
+
+        if ($this->file_change !== null) {
+            $dead = is_null($this->file_change->getDeletedAt());
+        }
+
+        $prime_data = new PrimeData($changed_at, $dead);
+
+        if ($this->prefix) {
+            $this->data[$this->prefix . $file_function->getFunction()] = $prime_data;
+        } else {
+            $this->data[$file_function->getFunction()] = $prime_data;
+        }
     }
 
     public function visitNode(Node &$node)

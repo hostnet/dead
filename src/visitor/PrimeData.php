@@ -17,27 +17,6 @@ class PrimeData
     private $dead;
 
     /**
-     * @var FileFunction[]
-     */
-    private $file_functions;
-
-    /**
-     * @param FileFunction[]
-     */
-    public function setFileFunctions(array $file_functions): void
-    {
-        $this->file_functions = $file_functions;
-    }
-
-    /**
-     * @return FileFunction[]
-     */
-    public function getFileFunctions(): array
-    {
-        return $this->file_functions;
-    }
-
-    /**
      * @return string
      */
     public function getChangedAt()
@@ -65,17 +44,14 @@ class PrimeData
     /**
      * @param int $changed_at string
      * @param $dead boolean
-     * @param FileFunction[] $file_functions
      */
-    public function __construct($changed_at = 0, $dead = false, $file_functions = [])
+    public function __construct($changed_at = 0, $dead = false)
     {
         assert(is_string($changed_at));
         assert(is_bool($dead));
-        assert(is_array($file_functions));
 
-        $this->changed_at     = $changed_at;
-        $this->dead           = $dead;
-        $this->file_functions = $file_functions;
+        $this->changed_at = $changed_at;
+        $this->dead       = $dead;
     }
 
     public function __toString()
