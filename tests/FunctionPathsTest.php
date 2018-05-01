@@ -24,7 +24,7 @@ class FunctionPathsTest extends TestCase
             $current_location . "/fixtures/ClassC.php::Dead\TestNamespace\ClassD::test6",
         ];
 
-        $functions = (new FileTreeFactory())->scan(__DIR__.'/fixtures')->produceList();
+        $functions = (new FileTreeFactory())->scan(__DIR__ . '/fixtures')->produceList();
 
         foreach ($functions as $function) {
             $results[] = $function->getFunction();
