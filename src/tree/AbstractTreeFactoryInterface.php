@@ -25,7 +25,7 @@ abstract class AbstractTreeFactoryInterface implements TreeFactoryInterface
                 $pointer = &$pointer->addChildByRelativePath($part);
             }
 
-            $pointer->addChild($leaves[$key]);
+            $pointer->addChild($node);
         }
 
         return $root;
