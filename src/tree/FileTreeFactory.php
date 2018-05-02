@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 class FileTreeFactory extends AbstractTreeFactoryInterface
 {
-    private $files = [];
+    private $functions = [];
 
     /**
      * @param $path string
@@ -22,7 +22,7 @@ class FileTreeFactory extends AbstractTreeFactoryInterface
             $filter_iterator->setFindExtension($extension);
             $path_length = strlen($path);
             foreach ($filter_iterator as $file) {
-                $this->addFile($file->getPathname());
+                $this->addFunctionsFromFile($file->getPathname());
             }
         } catch (UnexpectedValueException $e) {
             echo "Could not open dir $path" . PHP_EOL;
@@ -38,22 +38,20 @@ class FileTreeFactory extends AbstractTreeFactoryInterface
      * @param $filename string
      * @return FileTreeFactory
      */
-    public function addFile($filename): self
+    public function addFunctionsFromFile($filename): self
     {
         $node                   = new Node($filename);
         $function_paths_factory = new FunctionPathsFactory();
 
         foreach ($function_paths_factory->produceList($node) as $function) {
-            $node->addElement($function);
+            $this->functions[] = $function;
         }
-
-        $this->files[] = $node;
 
         return $this;
     }
 
     public function &produceList()
     {
-        return $this->files;
+        return $this->functions;
     }
 }

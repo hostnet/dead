@@ -62,34 +62,6 @@ class PrimeTask extends AbstractPdoTaskInterface
         return $visitor->getPrimeData();
     }
 
-    /**
-     * @param Node[] $compare_from
-     * @param Node[] $compare_against
-     * @return String[]
-     */
-    private function getFileFunctionDifference(array $compare_from, array $compare_against): array
-    {
-        $result = [];
-        foreach ($compare_from as $key => $value) {
-            foreach ($value->getFileFunctions() as $file_function) {
-                $compare_against_node = $compare_against[$key];
-                // If node doesn't exist in compare_against then add it to the difference
-                if (null === $compare_against_node) {
-                    $result[] = $file_function;
-                    continue;
-                }
-                $is_in_compare_against = \in_array($file_function, $compare_against[$key]->getFileFunctions(), true);
-                if ($is_in_compare_against) {
-                    continue;
-                }
-
-                $result[] = $file_function;
-            }
-        }
-
-        return $result;
-    }
-
     private function &addVersioning(&$list, NodeElementVisitorInterface $visitor)
     {
         foreach (array_keys($list) as $key) {
@@ -103,7 +75,7 @@ class PrimeTask extends AbstractPdoTaskInterface
     {
         // Read all files from the databse
         $factory = new PdoTreeFactory($this->getDb());
-        $factory->query(PdoTreeFactory::ALL_FILES);
+        $factory->query(PdoTreeFactory::FUNCTIONS_ALL);
         $list = $factory->produceList();
 
         return $list;
@@ -153,84 +125,12 @@ class PrimeTask extends AbstractPdoTaskInterface
         $new_local_nodes     = array_diff_key($prime_local_nodes, $prime_database_nodes);
         $deleted_local_nodes = array_diff_key($prime_database_nodes, $prime_local_nodes);
 
-        // Remove the new and deleted nodes from the original sets
-        $cleaned_database_nodes = array_intersect_key($prime_database_nodes, $prime_local_nodes);
-        $cleaned_local_nodes    = array_intersect_key($prime_local_nodes, $prime_database_nodes);
-
-        // Search for differences from local_nodes
-        // data compared to the database
-        $diff = array_diff_assoc($cleaned_local_nodes, $cleaned_database_nodes);
-
-        $new_file_functions     = $this->getFileFunctionDifference($prime_local_nodes, $prime_database_nodes);
-        $deleted_file_functions = $this->getFileFunctionDifference($prime_database_nodes, $prime_local_nodes);
-
-        $this->insertNewFileFunctions($new_file_functions);
-        $this->updateDeadFunctions($deleted_file_functions);
         // Commit all data to the database
         $this->getDb()->beginTransaction();
-        $this->insertNewFiles($new_local_nodes);
-        $this->updateDeadFiles($deleted_local_nodes);
-        $this->updateChangedFiles($diff, $cleaned_database_nodes);
+        $this->insertNewFileFunctions($new_local_nodes);
+        $this->updateDeadFunctions($deleted_local_nodes);
         $this->getDb()->commit();
     }
-
-    private function updateChangedFiles(array $diff, array $db)
-    {
-        if (count($diff) <= 0) {
-            return;
-        }
-
-        $table = $this->getTable();
-        $sql   = "";
-        $query =
-            "UPDATE $table SET deleted_at = NULL, last_hit=last_hit, changed_at = %s" .
-            "/* was: %s */ WHERE file = \"%s\";\n";
-        foreach ($diff as $file => $data) {
-            $changed_at         = $data->getSQLChangedAt();
-            $current_changed_at = $db[$file]->getSQLChangedAt();
-            $sql               .= sprintf($query, $changed_at, $current_changed_at, $file);
-        }
-
-        $sql;
-        $this->getDb()->exec($sql);
-    }
-
-    private function insertNewFiles(array $new)
-    {
-        $table     = $this->getTable();
-        $db        = $this->getDb();
-        $new_files = array_chunk($new, 1000, true);
-        foreach ($new_files as $new) {
-            $values = "";
-            foreach ($new as $file => $data) {
-                /*
-                 * @var $data PrimeData
-                 */
-                $safe_file  = $db->quote($file);
-                $changed_at = $data->getSQLChangedAt();
-                $values    .= "($safe_file,NOW(),$changed_at),\n";
-            }
-            $values = substr($values, 0, -2);
-
-            $query =
-                "INSERT INTO $table (file,added_at,changed_at) VALUES\n$values";
-            $db->exec($query);
-        }
-    }
-
-    private function updateDeadFiles($removed)
-    {
-        if (!count($removed)) {
-            return;
-        }
-
-        $table  = $this->getTable();
-        $values = implode("\",\"", array_keys($removed));
-        $query  =
-            "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND file IN (\"$values\")";
-        $this->getDb()->exec($query);
-    }
-
 
     /**
      * Constructs the SQL query and executes it.
@@ -245,7 +145,7 @@ class PrimeTask extends AbstractPdoTaskInterface
         $table = $this->getFunctionsTable();
         $db    = $this->getDb();
 
-        foreach ($new as $file_function) {
+        foreach ($new as $file_function => $data) {
             $query = $db->prepare("INSERT INTO $table (function, added_at) VALUES (:file_function, NOW())");
             $query->bindParam(":file_function", $file_function);
             $query->execute();
@@ -264,7 +164,7 @@ class PrimeTask extends AbstractPdoTaskInterface
         $table = $this->getFunctionsTable();
         $db    = $this->getDb();
 
-        foreach ($dead_functions as $file_function) {
+        foreach ($dead_functions as $file_function => $data) {
             $query = $db->prepare(
                 "UPDATE $table SET deleted_at = NOW() WHERE deleted_at IS NULL AND function = :file_function"
             );

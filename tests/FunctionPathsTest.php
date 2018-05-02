@@ -24,13 +24,12 @@ class FunctionPathsTest extends TestCase
             $current_location . "/fixtures/ClassC.php::Dead\TestNamespace\ClassD::test6",
         ];
 
-        $files = (new FileTreeFactory())->scan(__DIR__ . '/fixtures')->produceList();
-        foreach ($files as $file) {
-            $file_functions = (new FunctionPathsFactory())->produceList($file);
-            foreach ($file_functions as $file_function) {
-                $results[] = $file_function->getFunction();
-            }
+        $functions = (new FileTreeFactory())->scan(__DIR__ . '/fixtures')->produceList();
+
+        foreach ($functions as $function) {
+            $results[] = $function->getFunction();
         }
+
         $difference = array_diff($expected_results, $results);
         self::assertEmpty($difference, "Not all functions have been found or formatted correctly.");
     }
