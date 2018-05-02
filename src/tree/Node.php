@@ -39,10 +39,10 @@ class Node implements NodeElementInterface
         return count($this->children) == 0;
     }
 
-    public function addChild(Node &$node)
+    public function addChild(Node $node)
     {
         $node->setParent($this);
-        $this->children[] = &$node;
+        $this->children[] = $node;
     }
 
     public function addElement(NodeElementInterface $element)

@@ -10,14 +10,8 @@ class TreeTask extends AbstractPdoTaskInterface
     private $query =
         <<<EOQ
     CREATE TABLE IF NOT EXISTS %s (
-        file varchar(255) BINARY NOT NULL,
-        count bigint(20) NOT NULL,
-        file_count int(11) NOT NULL,
-        dead_count int(11) NOT NULL,
-        first_hit timestamp NULL default NULL,
-        last_hit timestamp NULL default NULL on update CURRENT_TIMESTAMP,
-        changed_at timestamp NULL default NULL,
-        PRIMARY KEY  (file)
+        function varchar(700) BINARY NOT NULL,
+        PRIMARY KEY  (function)
     );
     TRUNCATE %s;
     INSERT INTO `%s` (%s) VALUES %s;

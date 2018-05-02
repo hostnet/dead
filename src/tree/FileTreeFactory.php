@@ -36,9 +36,9 @@ class FileTreeFactory extends AbstractTreeFactoryInterface
     /**
      * When a file is added scan it for functions and add them to the file.
      * @param $filename string
-     * @return FileTreeFactory
+     * @return void
      */
-    public function addFunctionsFromFile($filename): self
+    public function addFunctionsFromFile($filename): void
     {
         $node                   = new Node($filename);
         $function_paths_factory = new FunctionPathsFactory();
@@ -46,8 +46,6 @@ class FileTreeFactory extends AbstractTreeFactoryInterface
         foreach ($function_paths_factory->produceList($node) as $function) {
             $this->functions[] = $function;
         }
-
-        return $this;
     }
 
     public function &produceList()
