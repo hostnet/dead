@@ -59,10 +59,10 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
 
     /**
      * @param array $row
-     * @return FileFunction
+     * @return Node
      */
-    protected function parseRow(array &$row): FileFunction
+    protected function parseRow(array &$row): Node
     {
-        return new FileFunction($row['function']);
+        return new Node($row['function']);
     }
 }

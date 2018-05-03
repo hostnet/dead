@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 class FileTreeFactory extends AbstractTreeFactoryInterface
 {
+    /**
+     * @var Node[]
+     */
     private $functions = [];
 
     /**
@@ -44,7 +47,7 @@ class FileTreeFactory extends AbstractTreeFactoryInterface
         $function_paths_factory = new FunctionPathsFactory();
 
         foreach ($function_paths_factory->produceList($node) as $function) {
-            $this->functions[] = $function;
+            $this->functions[] = new Node($function->getFunction());
         }
     }
 

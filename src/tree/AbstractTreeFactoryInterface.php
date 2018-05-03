@@ -14,18 +14,18 @@ abstract class AbstractTreeFactoryInterface implements TreeFactoryInterface
         $leaves = $this->produceList();
         $root   = new Tree("/"); // Create the root node of the file tree
 
-        foreach ($leaves as $key => $file_function) {
-            /* @var $file_function FileFunction */
-            $pointer = &$root; // Create a reference for tree walking
-            $node    = new Node($leaves[$key]->getFunction());
-            $path    = explode(DIRECTORY_SEPARATOR, trim($file_function->getFunction(), DIRECTORY_SEPARATOR));
-            array_pop($path);
+        foreach ($leaves as $key => $node) {
+            /* @var $node Node */
+            $pointer       = &$root; // Create a reference for tree walking
+            $path          = explode(DIRECTORY_SEPARATOR, trim($node->getLocation(), DIRECTORY_SEPARATOR));
+            $function_path = explode('::', $path[count($path) - 1]);
+            $path[count($path) - 1] = $function_path[0];
 
             foreach ($path as $part) {
                 $pointer = &$pointer->addChildByRelativePath($part);
             }
 
-            $pointer->addChild($node);
+            $pointer->addChild($leaves[$key]);
         }
 
         return $root;
