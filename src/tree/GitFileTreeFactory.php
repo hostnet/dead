@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 class GitFileTreeFactory extends AbstractTreeFactoryInterface
 {
-    private $files = [];
+    private $functions = [];
 
     private $git_command = 'git ls-tree -r --full-tree HEAD --name-only';
 
@@ -25,7 +25,7 @@ class GitFileTreeFactory extends AbstractTreeFactoryInterface
             $filter_iterator->setFindExtension($extension);
 
             foreach ($filter_iterator as $file) {
-                $this->files[] = new Node($path . DIRECTORY_SEPARATOR . $file, $file);
+                $this->addFunctionsFromFile($file);
             }
             pclose($handle);
         } catch (UnexpectedValueException $e) {
@@ -37,8 +37,18 @@ class GitFileTreeFactory extends AbstractTreeFactoryInterface
         return $this;
     }
 
+    public function addFunctionsFromFile($filename): void
+    {
+        $node                   = new Node($filename);
+        $function_paths_factory = new FunctionPathsFactory();
+
+        foreach ($function_paths_factory->produceList($node) as $function) {
+            $this->functions[] = new Node($function->getFunction(), $function->getFunction());
+        }
+    }
+
     public function &produceList()
     {
-        return $this->files;
+        return $this->functions;
     }
 }

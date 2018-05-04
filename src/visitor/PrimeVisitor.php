@@ -98,7 +98,7 @@ class PrimeVisitor extends AbstractNodeElementVisitorInterface
         $prime_data = new PrimeData($changed_at, $dead, $file_functions);
 
         if ($this->prefix) {
-            $this->data[$this->prefix . $node->getFullPath()] = $prime_data;
+            $this->data[$this->prefix . $node->getPath()] = $prime_data;
         } else {
             $this->data[$node->getFullPath()] = $prime_data;
         }

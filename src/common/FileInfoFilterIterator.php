@@ -15,7 +15,10 @@ class FileInfoFilterIterator extends FilterIterator
 
     public function accept()
     {
-        $info = new SplFileInfo($this->current()->getPathname());
+        $info = is_string($this->current()) ?
+            new SplFileInfo($this->current()) :
+            new SplFileInfo($this->current()->getPathname());
+
         if (in_array($info->getExtension(), $this->find_extensions)) {
             return true;
         }
