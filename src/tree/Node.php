@@ -19,7 +19,7 @@ class Node implements NodeElementInterface
         $parts           = explode('::', $full_path);
         $parts[0]        = realpath($parts[0]) ?: $parts[0];
         $this->full_path = $full_path;
-        $this->location  = join('', $parts);
+        $this->location  = join('::', $parts);
 
         if (strlen($full_path) <= 1) {
             $this->path = $full_path;

@@ -63,6 +63,13 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
      */
     protected function parseRow(array &$row): Node
     {
-        return new Node($row['function']);
+        $function   = $row['function'];
+        $changed_at = empty($row["added_at"]) ? null : new DateTime($row["added_at"]);
+        $version    = new Versioning(array(new Commit("", "", $changed_at, "")), 1);
+
+        $node = new Node($function);
+        $node->addElement($version);
+
+        return $node;
     }
 }
