@@ -65,7 +65,7 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
     {
         $function   = $row['function'];
         $changed_at = empty($row["added_at"]) ? null : new DateTime($row["added_at"]);
-        $version    = new Versioning(array(new Commit("", "", $changed_at, "")), 1);
+        $version    = new Versioning([new Commit("", "", $changed_at, "")], 1);
 
         $node = new Node($function);
         $node->addElement($version);
