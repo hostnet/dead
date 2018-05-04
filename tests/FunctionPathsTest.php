@@ -27,7 +27,7 @@ class FunctionPathsTest extends TestCase
         $functions = (new FileTreeFactory())->scan(__DIR__ . '/fixtures')->produceList();
 
         foreach ($functions as $function) {
-            $results[] = $function->getFunction();
+            $results[] = $function->getFullPath();
         }
 
         $difference = array_diff($expected_results, $results);
