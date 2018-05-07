@@ -37,7 +37,7 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
      * itself)
      * @var int
      */
-    private $file_count;
+    private $function_count;
 
 
     /**
@@ -75,9 +75,9 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
     /**
      * @return int
      */
-    public function getFileCount()
+    public function getFunctionCount()
     {
-        return $this->file_count;
+        return $this->function_count;
     }
 
     /**
@@ -93,7 +93,7 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
      */
     public function getRatioDead()
     {
-        return $this->dead_count / $this->file_count;
+        return $this->dead_count / $this->function_count;
     }
 
     /**
@@ -108,21 +108,21 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
      * @param int $count
      * @param DateTime $first_hit
      * @param DateTime $last_hit
-     * @param int $file_count
+     * @param int $function_count
      * @param null $dead_count
      */
-    public function __construct($count, $first_hit, $last_hit, $file_count = 1, $dead_count = null)
+    public function __construct($count, $first_hit, $last_hit, $function_count = 1, $dead_count = null)
     {
-        assert(is_numeric($file_count) && $file_count >= 0);
+        assert(is_numeric($function_count) && $function_count >= 0);
         assert(is_numeric($count) && $count >= 0);
         assert($dead_count === null || is_numeric($dead_count) && $dead_count >= 0);
         assert($first_hit === null || $first_hit instanceof DateTime);
         assert($last_hit === null || $last_hit instanceof DateTime);
 
-        $this->count      = $count;
-        $this->first_hit  = $first_hit;
-        $this->last_hit   = $last_hit;
-        $this->file_count = $file_count;
+        $this->count          = $count;
+        $this->first_hit      = $first_hit;
+        $this->last_hit       = $last_hit;
+        $this->function_count = $function_count;
 
         if ($dead_count === null) {
             $this->dead_count = $count > 0 ? 0 : 1;
@@ -140,7 +140,7 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
 
     public function __toString()
     {
-        return "<DynamicAnalysis fileCount=\"$this->file_count\" hits=\"$this->count\"\"/>";
+        return "<DynamicAnalysis fileCount=\"$this->function_count\" hits=\"$this->count\"\"/>";
     }
 
 
@@ -151,16 +151,18 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
     public function aggregate($analysis)
     {
         assert($analysis instanceof DynamicAnalysis);
-        $count = bcadd($analysis->getCount(), $this->count);
+        // TODO use bcadd for this to prevent integer overflow
+        $count = $analysis->getCount() + $this->count;
+
         if ($count < 0) {
             die($count);
         }
-        $first_hit  = max($analysis->getFirstHit(), $this->first_hit);
-        $last_hit   = max($analysis->getLastHit(), $this->last_hit);
-        $file_count = $analysis->getFileCount() + $this->file_count;
-        $dead_count = $analysis->getDeadCount() + $this->dead_count;
+        $first_hit      = max($analysis->getFirstHit(), $this->first_hit);
+        $last_hit       = max($analysis->getLastHit(), $this->last_hit);
+        $function_count = $analysis->getFunctionCount() + $this->function_count;
+        $dead_count     = $analysis->getDeadCount() + $this->dead_count;
 
-        return new DynamicAnalysis($count, $first_hit, $last_hit, $file_count, $dead_count);
+        return new DynamicAnalysis($count, $first_hit, $last_hit, $function_count, $dead_count);
     }
 
     public function getAggregateKey()

@@ -11,7 +11,12 @@ class TreeTask extends AbstractPdoTaskInterface
         <<<EOQ
     CREATE TABLE IF NOT EXISTS %s (
         function varchar(700) BINARY NOT NULL,
-        changed_at DATE,
+        count bigint(20) NOT NULL,
+        function_count int(11) NOT NULL,
+        dead_count int(11) NOT NULL,
+        first_hit timestamp NULL default NULL,
+        last_hit timestamp NULL default NULL on update CURRENT_TIMESTAMP,
+        changed_at timestamp NULL default NULL,
         PRIMARY KEY  (function)
     );
     TRUNCATE %s;
