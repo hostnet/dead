@@ -19,7 +19,12 @@ class PdoCacheTreeVisitor extends AbstractNodeElementVisitorInterface
         // Put all the data in the structure
         $this->data[] = [
             "function"   => $node->getFullPath(),
-            'changed_at' => $this->versioning->getLastChange(),
+            "count" => (int) $this->dynamic_analysis->getCount(),
+            "function_count" => (int) $this->dynamic_analysis->getFunctionCount(),
+            "dead_count" => (int) $this->dynamic_analysis->getDeadCount(),
+            "first_hit" => $this->dynamic_analysis->getFirstHit(),
+            "last_hit" => $this->dynamic_analysis->getLastHit(),
+            "changed_at" => $this->versioning->getLastChange(),
         ];
     }
 
