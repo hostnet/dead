@@ -16,8 +16,8 @@ class FunctionPathsFactory
         $tokens        = token_get_all($file_contents);
 
         return [
-            "location" => $file->getLocation(),
-            "tokens"   => $tokens,
+            "full_path" => $file->getFullPath(),
+            "tokens"    => $tokens,
         ];
     }
 
@@ -59,7 +59,7 @@ class FunctionPathsFactory
                     }
                     $function_name    = $function_name_token[1];
                     $function_paths[] = $this->generateFileFunction(
-                        $file['location'],
+                        $file['full_path'],
                         $namespace,
                         $class,
                         $function_name
@@ -74,12 +74,12 @@ class FunctionPathsFactory
     }
 
     private function generateFileFunction(
-        string $file_location,
+        string $full_path,
         string $namespace,
         string $class,
         string $function_name
     ): FileFunction {
-        $fully_qualified_namespace = $file_location . "::";
+        $fully_qualified_namespace = $full_path . "::";
 
         if (!empty($namespace)) {
             $fully_qualified_namespace .= $namespace;

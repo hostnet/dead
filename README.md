@@ -24,15 +24,15 @@ the application name instead of include.
 
 The create query is:
 ```sql
-CREATE TABLE `includes` (
- `file` varchar(255) NOT NULL,
+CREATE TABLE `includes_functions` (
+ `function` varchar(700) NOT NULL,
  `count` bigint(20) NOT NULL,
  `first_hit` timestamp NULL default NULL,
  `last_hit` timestamp NULL default NULL on update CURRENT_TIMESTAMP,
  `added_at` timestamp NULL default NULL,
  `deleted_at` timestamp NULL default NULL,
  `changed_at` timestamp NULL default NULL,
- PRIMARY KEY  (`file`)
+ PRIMARY KEY  (`function`)
 )
 ```
 To let PHP add data to the measuring a file has to be added to the server

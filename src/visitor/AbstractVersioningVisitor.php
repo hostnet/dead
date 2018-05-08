@@ -16,8 +16,9 @@ abstract class AbstractVersioningVisitor extends AbstractNodeElementVisitorInter
 
     public function visitNode(Node &$node)
     {
-        $commits = $this
-            ->getCommits($node->getLocation());
+        // Full path is local to the project directory.
+        // Explode it on '::' and get the first index to get the file path that is in git
+        $commits = $this->getCommits(explode('::', $node->getFullPath())[0]);
         if (!count($commits)) {
             return;
         }

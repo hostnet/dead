@@ -15,8 +15,11 @@ class Node implements NodeElementInterface
 
     public function __construct($full_path, $name = null)
     {
+        // This won't have any effect on file paths, just on function paths
+        $parts           = explode('::', $full_path);
+        $parts[0]        = realpath($parts[0]) ?: $parts[0];
         $this->full_path = $full_path;
-        $this->location  = realpath($full_path) ?: $full_path;
+        $this->location  = join('::', $parts);
 
         if (strlen($full_path) <= 1) {
             $this->path = $full_path;

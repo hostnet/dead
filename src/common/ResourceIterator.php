@@ -27,7 +27,10 @@ class ResourceIterator implements Iterator
 
     public function next()
     {
-        return $this->current_line = rtrim(fgets($this->handle));
+        $fgets = fgets($this->handle);
+        if ($fgets) {
+            return $this->current_line = rtrim($fgets);
+        }
     }
 
     public function key()

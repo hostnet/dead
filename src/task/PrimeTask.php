@@ -146,8 +146,12 @@ class PrimeTask extends AbstractPdoTaskInterface
         $db    = $this->getDb();
 
         foreach ($new as $file_function => $data) {
-            $query = $db->prepare("INSERT INTO $table (function, added_at) VALUES (:file_function, NOW())");
+            $query      = $db->prepare(
+                "INSERT INTO $table (function, added_at, changed_at) VALUES (:file_function, NOW(), :changed_at)"
+            );
+            $changed_at = $data->getChangedAt();
             $query->bindParam(":file_function", $file_function);
+            $query->bindParam(":changed_at", $changed_at);
             $query->execute();
         }
     }
