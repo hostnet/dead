@@ -6,13 +6,13 @@ declare(strict_types=1);
 
 class SubversionVisitor extends AbstractVersioningVisitor
 {
-    const SVN_LIST = 0;
-    const SVN_INFO = 1;
-    const SVN_LOG  = 2;
+    const SVN_LIST       = 0;
+    const SVN_INFO       = 1;
+    const SVN_LOG        = 2;
     private $svn_command = "/usr/bin/env svn";
     private $mode;
     private $path;
-    private $xml = null;
+    private $xml     = null;
     private $min_svn = "1.4.0";
 
     public function __construct($path = null, $mode = self::SVN_INFO)

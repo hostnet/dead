@@ -15,10 +15,10 @@ abstract class AbstractTreeFactoryInterface implements TreeFactoryInterface
         $root   = new Tree("/"); // Create the root node of the file tree
 
         foreach ($leaves as $key => $node) {
-            /* @var $node Node */
-            $pointer       = &$root; // Create a reference for tree walking
-            $path          = explode(DIRECTORY_SEPARATOR, trim($node->getLocation(), DIRECTORY_SEPARATOR));
-            $function_path = explode('::', $path[count($path) - 1]);
+            /** @var Node $node */
+            $pointer                = &$root; // Create a reference for tree walking
+            $path                   = explode(DIRECTORY_SEPARATOR, trim($node->getLocation(), DIRECTORY_SEPARATOR));
+            $function_path          = explode('::', $path[count($path) - 1]);
             $path[count($path) - 1] = $function_path[0];
 
             foreach ($path as $part) {

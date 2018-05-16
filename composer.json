@@ -9,7 +9,7 @@
         "pear/pear_exception":      "*@dev"
     },
     "require-dev": {
-        "hostnet/phpcs-tool": "^6.0.1",
+        "hostnet/phpcs-tool": "^8.0.1",
         "phpunit/phpunit":    "^7.0.3"
     },
     "autoload": {
