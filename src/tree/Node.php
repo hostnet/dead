@@ -82,7 +82,7 @@ class Node implements NodeElementInterface
      */
     public function &addChildByRelativePath($path)
     {
-        /* @var $node Node */
+        /** @var Node $node */
         $node = null;
 
         if (array_key_exists($path, $this->children)) {
@@ -128,7 +128,7 @@ class Node implements NodeElementInterface
     {
         $string = $this->toStringSinge();
         foreach ($this->children as $child) {
-            /* @var $child Node */
+            /** @var Node $child */
             $string .= PHP_EOL . $indent
                 . $child->toStringRecursive($indent . "  ");
         }

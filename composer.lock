@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "499c28a13b52caf61c1297f4a96c40d7",
+    "content-hash": "565f06187fccec0465b6a17af3d7912c",
     "packages": [
         {
             "name": "pear/console_commandline",
@@ -217,16 +217,16 @@
         },
         {
             "name": "hostnet/phpcs-tool",
-            "version": "6.0.1",
+            "version": "8.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hostnet/phpcs-tool.git",
-                "reference": "1c174f6dca18eb7542542923457f75f710b9e61c"
+                "reference": "5a4149ebf5059eaba50370a3471b66f720d44464"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hostnet/phpcs-tool/zipball/1c174f6dca18eb7542542923457f75f710b9e61c",
-                "reference": "1c174f6dca18eb7542542923457f75f710b9e61c",
+                "url": "https://api.github.com/repos/hostnet/phpcs-tool/zipball/5a4149ebf5059eaba50370a3471b66f720d44464",
+                "reference": "5a4149ebf5059eaba50370a3471b66f720d44464",
                 "shasum": ""
             },
             "require": {
@@ -255,7 +255,7 @@
                 "MIT"
             ],
             "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards. Hostnet version",
-            "time": "2018-04-23T13:31:50+00:00"
+            "time": "2018-05-16T10:07:01+00:00"
         },
         {
             "name": "myclabs/deep-copy",

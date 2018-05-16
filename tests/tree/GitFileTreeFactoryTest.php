@@ -6,6 +6,9 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \GitFileTreeFactory
+ */
 class GitFileTreeFactoryTest extends TestCase
 {
     public function testScan()
