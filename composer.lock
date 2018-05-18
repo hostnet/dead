@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "565f06187fccec0465b6a17af3d7912c",
@@ -1569,16 +1569,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "4.5.2",
+            "version": "4.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "1e609159241fa90d5a429f185b2ea9b881340a7c"
+                "reference": "95436f14d4a6fe8638bcba09d3a8e19266846ee4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/1e609159241fa90d5a429f185b2ea9b881340a7c",
-                "reference": "1e609159241fa90d5a429f185b2ea9b881340a7c",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/95436f14d4a6fe8638bcba09d3a8e19266846ee4",
+                "reference": "95436f14d4a6fe8638bcba09d3a8e19266846ee4",
                 "shasum": ""
             },
             "require": {
@@ -1587,12 +1587,11 @@
             },
             "require-dev": {
                 "jakub-onderka/php-parallel-lint": "1.0.0",
-                "phing/phing": "2.16",
+                "phing/phing": "2.16.1",
                 "phpstan/phpstan": "0.9.2",
                 "phpstan/phpstan-phpunit": "0.9.4",
                 "phpstan/phpstan-strict-rules": "0.9",
-                "phpunit/php-code-coverage": "6.0.1",
-                "phpunit/phpunit": "7.0.2"
+                "phpunit/phpunit": "7.1.5"
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
@@ -1605,7 +1604,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2018-03-08T08:14:33+00:00"
+            "time": "2018-05-15T21:21:12+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -1660,7 +1659,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.0.8",
+            "version": "v4.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
