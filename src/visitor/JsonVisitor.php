@@ -48,20 +48,14 @@ class JsonVisitor extends AbstractNodeElementVisitorInterface
         $first_hit  = $this->formatDate($this->dynamic_analysis->getFirstHit());
         $last_hit   = $this->formatDate($this->dynamic_analysis->getLastHit());
 
-        if (substr($node->getPath(), -4) === ".php") {
-            $leaf = true;
-        } else {
-            $leaf = false;
-        }
-        $json["leaf"]             = $leaf;
+        $json["leaf"]             = false !== strpos($node->getPath(), '::');
         $json["changed_at"]       = $changed_at;
-        $json["file_count"]       = $this->dynamic_analysis->getFileCount();
+        $json["function_count"]   = $this->dynamic_analysis->getFunctionCount();
         $json["hit_count"]        = $this->dynamic_analysis->getCount();
         $json["dead_count"]       = $this->dynamic_analysis->getDeadCount();
         $json["first_hit"]        = $first_hit;
         $json["last_hit"]         = $last_hit;
-        $json["color"]            = $this
-            ->ratioToColor($this->dynamic_analysis->getRatioDead());
+        $json["color"]            = $this->ratioToColor($this->dynamic_analysis->getRatioDead());
         $json["pct_dead"]         = $this->dynamic_analysis->getPctDead();
         $json["class"]            = $this->cssEncode($node->getPath());
         $json["name"]             = $node->getPath();

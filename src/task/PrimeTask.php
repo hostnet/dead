@@ -142,7 +142,7 @@ class PrimeTask extends AbstractPdoTaskInterface
         if (0 === \count($new)) {
             return;
         }
-        $table = $this->getFunctionsTable();
+        $table = $this->getTable();
         $db    = $this->getDb();
 
         foreach ($new as $file_function => $data) {
@@ -165,7 +165,7 @@ class PrimeTask extends AbstractPdoTaskInterface
         if (0 === \count($dead_functions)) {
             return;
         }
-        $table = $this->getFunctionsTable();
+        $table = $this->getTable();
         $db    = $this->getDb();
 
         foreach ($dead_functions as $file_function => $data) {

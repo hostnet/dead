@@ -24,7 +24,7 @@ the application name instead of include.
 
 The create query is:
 ```sql
-CREATE TABLE `includes_functions` (
+CREATE TABLE `includes` (
  `function` varchar(700) NOT NULL,
  `count` bigint(20) NOT NULL,
  `first_hit` timestamp NULL default NULL,

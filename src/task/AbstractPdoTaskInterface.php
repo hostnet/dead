@@ -87,11 +87,6 @@ abstract class AbstractPdoTaskInterface implements TaskInterface
         return $this->table;
     }
 
-    public function getFunctionsTable()
-    {
-        return $this->table . "_functions";
-    }
-
     /**
      * @param mixed $field
      * @return string;
