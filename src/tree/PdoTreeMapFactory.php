@@ -18,7 +18,7 @@ class PdoTreeMapFactory extends AbstractTreeFactoryInterface
      */
     private $leaves = [];
 
-    private $query = "SELECT * FROM %s WHERE file REGEXP %s";
+    private $query = "SELECT * FROM %s WHERE function REGEXP %s";
 
     public function __construct(PDO $db)
     {
@@ -47,8 +47,8 @@ class PdoTreeMapFactory extends AbstractTreeFactoryInterface
      */
     public function query($path)
     {
-        $path      = $this->db->quote("^$path/[^/]+$");
-        $query     = sprintf($this->query, $this->table, $path);
+        $regex     = strpos($path, '.php') ? "^$path::.*" : "^$path/[^/:{2}]+$";
+        $query     = sprintf($this->query, $this->table, $this->db->quote($regex));
         $statement = $this->db->query($query);
         $statement->execute();
 
@@ -64,22 +64,19 @@ class PdoTreeMapFactory extends AbstractTreeFactoryInterface
      */
     protected function parseRow(array &$row)
     {
-        $count      = empty($row["count"]) ? 0 : $row["count"];
-        $file_count = empty($row["file_count"]) ? 0 : $row["file_count"];
-        $dead_count = empty($row["dead_count"]) ? 0 : $row["dead_count"];
-        $first_hit  = empty($row["first_hit"]) ? null
-            : new DateTime($row["first_hit"]);
-        $last_hit   = empty($row["last_hit"]) ? null
-            : new DateTime($row["last_hit"]);
-        $changed_at = empty($row["changed_at"]) ? null
-            : new DateTime($row["changed_at"]);
+        $count          = empty($row["count"]) ? 0 : $row["count"];
+        $function_count = empty($row["function_count"]) ? 0 : $row["function_count"];
+        $dead_count     = empty($row["dead_count"]) ? 0 : $row["dead_count"];
+        $first_hit      = empty($row["first_hit"]) ? null : new DateTime($row["first_hit"]);
+        $last_hit       = empty($row["last_hit"]) ? null : new DateTime($row["last_hit"]);
+        $changed_at     = empty($row["changed_at"]) ? null : new DateTime($row["changed_at"]);
 
-        $node = new Node($row['file']);
+        $node = new Node($row['function']);
 
         $version = new Versioning([new Commit("", "", $changed_at, "")], 1);
         $node->addElement($version);
 
-        $analysis = new DynamicAnalysis($count, $first_hit, $last_hit, $file_count, $dead_count);
+        $analysis = new DynamicAnalysis($count, $first_hit, $last_hit, $function_count, $dead_count);
         $node->addElement($analysis);
 
         return $node;

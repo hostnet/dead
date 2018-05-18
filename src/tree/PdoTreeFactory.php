@@ -12,7 +12,7 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
     const FUNCTIONS_QUERY_ALL      = 'SELECT * FROM %s';
     const FUNCTIONS_QUERY_EXISTING = 'SELECT * FROM %s WHERE deleted_at IS NULL;';
 
-    private $table_functions;
+    private $table;
     /**
      * The database connection
      * @var PDO
@@ -26,9 +26,9 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
 
     public function __construct(PDO $db)
     {
-        $this->table_functions = Settings::instance()->getOption('table') . '_functions';
-        $this->db              = $db;
-        $this->leaves          = [];
+        $this->table  = Settings::instance()->getOption('table');
+        $this->db     = $db;
+        $this->leaves = [];
     }
 
     /**
@@ -47,7 +47,7 @@ class PdoTreeFactory extends AbstractTreeFactoryInterface
     public function query($all = self::FUNCTIONS_EXISTING)
     {
         $query     = $all ? self::FUNCTIONS_QUERY_ALL : self::FUNCTIONS_QUERY_EXISTING;
-        $query     = sprintf($query, $this->table_functions);
+        $query     = sprintf($query, $this->table);
         $statement = $this->db->query($query);
         $statement->execute();
 
