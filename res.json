@@ -1,0 +1,90 @@
+{
+  "children": [
+    {
+      "leaf": true,
+      "changed_at": "2018-05-18",
+      "function_count": "1",
+      "hit_count": 0,
+      "dead_count": "1",
+      "first_hit": "N\/A",
+      "last_hit": "N\/A",
+      "color": "#FF0000",
+      "pct_dead": 100,
+      "class": "ResourceIterator_dot_phpxResourceIteratorx__construct",
+      "name": "ResourceIterator.php::ResourceIterator::__construct",
+      "path": "\/src\/common\/ResourceIterator.php::ResourceIterator::__construct"
+    },
+    {
+      "leaf": true,
+      "changed_at": "2018-05-18",
+      "function_count": "1",
+      "hit_count": 0,
+      "dead_count": "1",
+      "first_hit": "N\/A",
+      "last_hit": "N\/A",
+      "color": "#FF0000",
+      "pct_dead": 100,
+      "class": "ResourceIterator_dot_phpxResourceIteratorxcurrent",
+      "name": "ResourceIterator.php::ResourceIterator::current",
+      "path": "\/src\/common\/ResourceIterator.php::ResourceIterator::current"
+    },
+    {
+      "leaf": true,
+      "changed_at": "2018-05-18",
+      "function_count": "1",
+      "hit_count": 0,
+      "dead_count": "1",
+      "first_hit": "N\/A",
+      "last_hit": "N\/A",
+      "color": "#FF0000",
+      "pct_dead": 100,
+      "class": "ResourceIterator_dot_phpxResourceIteratorxkey",
+      "name": "ResourceIterator.php::ResourceIterator::key",
+      "path": "\/src\/common\/ResourceIterator.php::ResourceIterator::key"
+    },
+    {
+      "leaf": true,
+      "changed_at": "2018-05-18",
+      "function_count": "1",
+      "hit_count": 0,
+      "dead_count": "1",
+      "first_hit": "N\/A",
+      "last_hit": "N\/A",
+      "color": "#FF0000",
+      "pct_dead": 100,
+      "class": "ResourceIterator_dot_phpxResourceIteratorxnext",
+      "name": "ResourceIterator.php::ResourceIterator::next",
+      "path": "\/src\/common\/ResourceIterator.php::ResourceIterator::next"
+    },
+    {
+      "leaf": true,
+      "changed_at": "2018-05-18",
+      "function_count": "1",
+      "hit_count": 0,
+      "dead_count": "1",
+      "first_hit": "N\/A",
+      "last_hit": "N\/A",
+      "color": "#FF0000",
+      "pct_dead": 100,
+      "class": "ResourceIterator_dot_phpxResourceIteratorxrewind",
+      "name": "ResourceIterator.php::ResourceIterator::rewind",
+      "path": "\/src\/common\/ResourceIterator.php::ResourceIterator::rewind"
+    },
+    {
+      "leaf": true,
+      "changed_at": "2018-05-18",
+      "function_count": "1",
+      "hit_count": 0,
+      "dead_count": "1",
+      "first_hit": "N\/A",
+      "last_hit": "N\/A",
+      "color": "#FF0000",
+      "pct_dead": 100,
+      "class": "ResourceIterator_dot_phpxResourceIteratorxvalid",
+      "name": "ResourceIterator.php::ResourceIterator::valid",
+      "path": "\/src\/common\/ResourceIterator.php::ResourceIterator::valid"
+    }
+  ],
+  "name": "\/src\/common\/ResourceIterator.php",
+  "path": "\/src\/common"
+}
