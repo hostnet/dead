@@ -59,7 +59,6 @@ class SaturationGraphTask extends AbstractPdoTaskInterface
             $this->tables = $tables;
         }
 
-
         if ($scale === null) {
             $this->scale = $settings->getCommand()->getCommand()->getOption("scale");
         } else {

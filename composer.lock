@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "565f06187fccec0465b6a17af3d7912c",
+    "content-hash": "2bc06a854d8c1d9f6ac04224eae3aa19",
     "packages": [
         {
             "name": "pear/console_commandline",
@@ -217,24 +217,24 @@
         },
         {
             "name": "hostnet/phpcs-tool",
-            "version": "8.0.1",
+            "version": "8.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hostnet/phpcs-tool.git",
-                "reference": "5a4149ebf5059eaba50370a3471b66f720d44464"
+                "reference": "3349be06a3bf14b2cebd48b3855c966b69499b07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hostnet/phpcs-tool/zipball/5a4149ebf5059eaba50370a3471b66f720d44464",
-                "reference": "5a4149ebf5059eaba50370a3471b66f720d44464",
+                "url": "https://api.github.com/repos/hostnet/phpcs-tool/zipball/3349be06a3bf14b2cebd48b3855c966b69499b07",
+                "reference": "3349be06a3bf14b2cebd48b3855c966b69499b07",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0.0",
                 "hostnet/path-composer-plugin-lib": "^1.0.2",
                 "php": ">=7.1",
-                "slevomat/coding-standard": "^4.5",
-                "squizlabs/php_codesniffer": "^3.2.0",
+                "slevomat/coding-standard": "^4.6.0",
+                "squizlabs/php_codesniffer": "~3.2.0",
                 "symfony/filesystem": "^3.0.2|^4.0"
             },
             "require-dev": {
@@ -255,7 +255,7 @@
                 "MIT"
             ],
             "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards. Hostnet version",
-            "time": "2018-05-16T10:07:01+00:00"
+            "time": "2018-09-12T10:44:15+00:00"
         },
         {
             "name": "myclabs/deep-copy",
