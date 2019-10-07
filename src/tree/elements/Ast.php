@@ -25,7 +25,6 @@ class Ast implements NodeElementInterface
         $this->ast = $ast;
     }
 
-
     public function getAst()
     {
         return $this->ast;

@@ -156,7 +156,6 @@ class PrimeTask extends AbstractPdoTaskInterface
         }
     }
 
-
     /**
      * @param iterable|string[] $dead_functions
      */
