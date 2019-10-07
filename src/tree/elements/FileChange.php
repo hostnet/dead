@@ -22,7 +22,6 @@ class FileChange implements NodeElementInterface
      */
     private $deleted_at;
 
-
     /**
      * The number of children the Node has
      * @var int
@@ -73,7 +72,6 @@ class FileChange implements NodeElementInterface
         return $this->deleted_at;
     }
 
-
     /**
      * @param DateTime $added_at
      * @param DateTime $deleted_at
@@ -84,12 +82,10 @@ class FileChange implements NodeElementInterface
         $this->deleted_at = $deleted_at;
     }
 
-
     public function accept(NodeElementVisitorInterface $visitor)
     {
         $visitor->visitFileChange($this);
     }
-
 
     public function __toString()
     {

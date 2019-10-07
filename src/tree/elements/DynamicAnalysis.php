@@ -30,7 +30,6 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
      */
     private $last_hit;
 
-
     /**
      * The number of files contained
      * by this node (including the node
@@ -38,7 +37,6 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
      * @var int
      */
     private $function_count;
-
 
     /**
      * The number of dead files
@@ -131,18 +129,15 @@ class DynamicAnalysis implements NodeElementInterface, AggregatableInterface
         }
     }
 
-
     public function accept(NodeElementVisitorInterface $visitor)
     {
         $visitor->visitDynamicAnalysis($this);
     }
 
-
     public function __toString()
     {
         return "<DynamicAnalysis fileCount=\"$this->function_count\" hits=\"$this->count\"\"/>";
     }
-
 
     /**
      * @param DynamicAnalysis $analysis
