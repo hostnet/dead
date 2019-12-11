@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1fc0732decb5a77c4df7e076d78b81c1",
+    "content-hash": "b553ec86d1a4e8573601d866837567c8",
     "packages": [
         {
             "name": "pear/console_commandline",
@@ -65,12 +65,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pear/PEAR_Exception.git",
-                "reference": "8c18719fdae000b690e3912be401c76e406dd13b"
+                "reference": "dbb42a5a0e45f3adcf99babfb2a1ba77b8ac36a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/8c18719fdae000b690e3912be401c76e406dd13b",
-                "reference": "8c18719fdae000b690e3912be401c76e406dd13b",
+                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/dbb42a5a0e45f3adcf99babfb2a1ba77b8ac36a7",
+                "reference": "dbb42a5a0e45f3adcf99babfb2a1ba77b8ac36a7",
                 "shasum": ""
             },
             "require": {
@@ -86,9 +86,9 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "PEAR": ""
-                }
+                "classmap": [
+                    "PEAR/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "include-path": [
@@ -112,7 +112,7 @@
             "keywords": [
                 "exception"
             ],
-            "time": "2015-02-10T20:07:52+00:00"
+            "time": "2019-12-10T10:24:42+00:00"
         }
     ],
     "packages-dev": [
@@ -339,16 +339,16 @@
         },
         {
             "name": "hostnet/phpcs-tool",
-            "version": "8.3.5",
+            "version": "8.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hostnet/phpcs-tool.git",
-                "reference": "192d79ce68d2a973fbca385325395194ed924f43"
+                "reference": "037a2ad28c65bebf8679ce10dc8cead80f825c67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hostnet/phpcs-tool/zipball/192d79ce68d2a973fbca385325395194ed924f43",
-                "reference": "192d79ce68d2a973fbca385325395194ed924f43",
+                "url": "https://api.github.com/repos/hostnet/phpcs-tool/zipball/037a2ad28c65bebf8679ce10dc8cead80f825c67",
+                "reference": "037a2ad28c65bebf8679ce10dc8cead80f825c67",
                 "shasum": ""
             },
             "require": {
@@ -378,7 +378,7 @@
                 "MIT"
             ],
             "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards. Hostnet version",
-            "time": "2019-10-03T06:40:43+00:00"
+            "time": "2019-12-10T15:25:46+00:00"
         },
         {
             "name": "mediawiki/mediawiki-codesniffer",
