@@ -4,7 +4,7 @@
     "license":           "MIT",
     "minimum-stability": "stable",
     "require": {
-        "php":                      ">=7.1",
+        "php":                      ">=7.2",
         "pear/console_commandline": "*@dev",
         "pear/pear_exception":      "*@dev"
     },
